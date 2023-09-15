@@ -1,7 +1,8 @@
 import { ContentType, Roles, Status } from "../utils/constants.utils";
+import { Request, Response } from "express";
 
 export class ConversationController {
-    getPreviousConversations(request: any, response: any) {
+    getPreviousConversations(request: Request, response: Response) {
         const { userId } = request.query;
 
         if (!userId) {
@@ -106,7 +107,7 @@ export class ConversationController {
 
     }
 
-    sendUserMessage(request: any, response: any) {
+    sendUserMessage(request: Request, response: Response) {
 
         const { userId, messageContent, conversationId, timeStamp, isLoggedIn, authorRole } = request.body
 
@@ -120,7 +121,7 @@ export class ConversationController {
         //If conversation exists then add message to the user.conversation.messages
         //If conversation does not exist, then create a new conversation
 
-        if (request?.isLoggedIn) {
+        if (isLoggedIn) {
             response.status(200).send({
                 "userId": userId,
                 "conversationIds": [

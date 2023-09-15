@@ -7,7 +7,9 @@
   "author": "king-Alex-d-great <ogubuikealex@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "dev": "tsc && yarn nodemon"
+    "dev": "tsc && yarn nodemon",
+    "build": "rimraf ./build && tsc",
+    "start": "npm run build && node build/index.ts"
   },
   "private": true,
   "dependencies": {
@@ -18,6 +20,7 @@
     "express": "^4.18.2",
     "mongoose": "^7.5.1",
     "nodemon": "^3.0.1",
+    "rimraf": "^5.0.1",
     "typescript": "^5.2.2",
     "yup": "^1.2.0"
   },

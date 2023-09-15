@@ -115,7 +115,7 @@ class ConversationController {
         //Get a conversation where request.conversation.Id == user.conversation.id
         //If conversation exists then add message to the user.conversation.messages
         //If conversation does not exist, then create a new conversation
-        if (request === null || request === void 0 ? void 0 : request.isLoggedIn) {
+        if (isLoggedIn) {
             response.status(200).send({
                 "userId": userId,
                 "conversationIds": [

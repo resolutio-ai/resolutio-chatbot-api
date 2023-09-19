@@ -1,4 +1,4 @@
-import { Schema } from 'mongoose';
+import { Schema, model } from 'mongoose';
 import { IUser } from './interfaces.models';
 import { ContentType, Roles, Status } from '../utils/constants.utils';
 
@@ -9,7 +9,7 @@ export const userSchema = new Schema<IUser>({
             _id: { type: String },
             messages: [
                 {
-                    id: { type: Schema.Types.ObjectId, ref: 'Message' },
+                    id: { type: Schema.Types.ObjectId},
                     authorRole: { type: Roles, required: true },
                     content: {
                         content_type: { type: ContentType, required: true },
@@ -23,3 +23,4 @@ export const userSchema = new Schema<IUser>({
     }
 });
 
+export const userModel = model("User", userSchema);

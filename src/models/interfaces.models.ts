@@ -6,6 +6,7 @@ export interface IMessage {
     content: {
         contentType: ContentType;
         parts: string[];
+        cid: string
     };
     status: Status;
     timeStamp: Date;
@@ -13,7 +14,7 @@ export interface IMessage {
 
 export interface IConversation {
     _id: string;
-    messages: { id: IMessage }[];
+    messages: IMessage[];
 }
 export interface IUser {
     userId: string;

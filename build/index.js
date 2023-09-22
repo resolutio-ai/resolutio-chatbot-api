@@ -16,6 +16,7 @@ const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const routes_1 = require("./routes");
 const constants_utils_1 = require("./utils/constants.utils");
+const apikey_1 = require("./controller/lighthouse/apikey");
 const app = (0, express_1.default)();
 const PORT = 3000;
 //connectDatabase();
@@ -26,6 +27,7 @@ app.get("/", (_, res) => __awaiter(void 0, void 0, void 0, function* () {
 app.use("/api", routes_1.apiRoutes);
 app.all("*", (_, res) => res.status(404).send({ message: "route not found" }));
 //app.use(errorHandler);
+() => __awaiter(void 0, void 0, void 0, function* () { return console.log(yield (0, apikey_1.getApiKey)(), "API- KEY"); });
 app.listen(PORT, () => {
     console.log(`Server running\nListening on port:${PORT}`);
 });

@@ -3,9 +3,10 @@ import cors from "cors"
 import { connectDatabase } from "./config/database.config";
 import { apiRoutes } from "./routes";
 import { corsOptions } from "./utils/constants.utils";
+import { getApiKey } from "./controller/lighthouse/apikey";
+import { PORT } from "./config/env.config";
 
 const app = express();
-const PORT = 3000;
 
 //connectDatabase();
 
@@ -21,8 +22,9 @@ app.all("*", (_, res) =>
 );
 
 //app.use(errorHandler);
+//(async () => console.log(await getApiKey(), "API- KEY"))();
 
-app.listen(PORT, () => {
+app.listen(PORT || 3000, () => {
     console.log(
         `Server running\nListening on port:${PORT}`
     );

@@ -16,17 +16,17 @@ exports.getApiKey = void 0;
 const sdk_1 = __importDefault(require("@lighthouse-web3/sdk"));
 const axios_1 = __importDefault(require("axios"));
 const ethers_1 = require("ethers");
+const env_config_1 = require("../../config/env.config");
 const signAuthMessage = (privateKey, messageRequested) => __awaiter(void 0, void 0, void 0, function* () {
     const signer = new ethers_1.ethers.Wallet(privateKey);
     return yield signer.signMessage(messageRequested);
 });
 const getApiKey = () => __awaiter(void 0, void 0, void 0, function* () {
-    const wallet = {
-        publicKey: '0xFB403ECFdEC9faC6f00Ac07Fe4888b7C89599536',
-        privateKey: '7039070945cb8e442268fd1e58e8f7f5e69defca7d9086b4793f93f4db060b35'
-    };
-    const verificationMessage = (yield axios_1.default.get(`https://api.lighthouse.storage/api/auth/get_message?publicKey=${wallet.publicKey}`)).data;
-    const signedMessage = yield signAuthMessage(wallet.privateKey, verificationMessage);
-    return yield sdk_1.default.getApiKey(wallet.publicKey, signedMessage);
+    if (!env_config_1.PUBLIC_KEY || !env_config_1.PRIVATE_KEY) {
+        throw new Error(!env_config_1.PUBLIC_KEY ? 'Public Key is missing' : 'Private Key is Missing');
+    }
+    const verificationMessage = (yield axios_1.default.get(`${env_config_1.GET_APIKEY_ENDPOINT}${env_config_1.PUBLIC_KEY}`)).data;
+    const signedMessage = yield signAuthMessage(env_config_1.PRIVATE_KEY, verificationMessage);
+    return yield sdk_1.default.getApiKey(env_config_1.PUBLIC_KEY, signedMessage);
 });
 exports.getApiKey = getApiKey;

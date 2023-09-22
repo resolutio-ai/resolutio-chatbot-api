@@ -10,7 +10,7 @@ exports.userSchema = new mongoose_1.Schema({
                 _id: { type: String },
                 messages: [
                     {
-                        id: { type: mongoose_1.Schema.Types.ObjectId, ref: 'Message' },
+                        id: { type: mongoose_1.Schema.Types.ObjectId },
                         authorRole: { type: constants_utils_1.Roles, required: true },
                         content: {
                             content_type: { type: constants_utils_1.ContentType, required: true },
@@ -23,3 +23,4 @@ exports.userSchema = new mongoose_1.Schema({
             }], required: false
     }
 });
+//export const userModel = model("User", userSchema);

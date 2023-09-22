@@ -22,27 +22,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const dotenv = __importStar(require("dotenv"));
-dotenv.config();
-const sdk_1 = __importDefault(require("@lighthouse-web3/sdk"));
-const uploadText = () => __awaiter(void 0, void 0, void 0, function* () {
-    const apiKey = process.env.API_KEY; // Generate from https://files.lighthouse.storage/ or CLI (lighthouse-web3 api-key --new)
-    const response = yield sdk_1.default.uploadText("This is a string", apiKey);
-    // Display response
-    console.log(response);
-    console.log("Visit at: https://gateway.lighthouse.storage/ipfs/" + response.data.Hash);
-});
-uploadText();
+exports.APIKey = exports.Upload = void 0;
+exports.Upload = __importStar(require("./upload"));
+exports.APIKey = __importStar(require("./apikey"));

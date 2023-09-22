@@ -16,18 +16,22 @@ const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const routes_1 = require("./routes");
 const constants_utils_1 = require("./utils/constants.utils");
-const apikey_1 = require("./controller/lighthouse/apikey");
-const app = (0, express_1.default)();
-const PORT = 3000;
-//connectDatabase();
-app.use((0, cors_1.default)(constants_utils_1.corsOptions));
-app.get("/", (_, res) => __awaiter(void 0, void 0, void 0, function* () {
-    res.status(200).send("Welcome to Resolutio Chatbot :)");
-}));
-app.use("/api", routes_1.apiRoutes);
-app.all("*", (_, res) => res.status(404).send({ message: "route not found" }));
-//app.use(errorHandler);
-() => __awaiter(void 0, void 0, void 0, function* () { return console.log(yield (0, apikey_1.getApiKey)(), "API- KEY"); });
-app.listen(PORT, () => {
-    console.log(`Server running\nListening on port:${PORT}`);
-});
+const env_config_1 = require("./config/env.config");
+try {
+    const app = (0, express_1.default)();
+    //connectDatabase();
+    app.use((0, cors_1.default)(constants_utils_1.corsOptions));
+    app.get("/", (_, res) => __awaiter(void 0, void 0, void 0, function* () {
+        res.status(200).send("Welcome to Resolutio Chatbot :)");
+    }));
+    app.use("/api", routes_1.apiRoutes);
+    app.all("*", (_, res) => res.status(404).send({ message: "route not found" }));
+    //app.use(errorHandler);
+    //(async () => console.log(await getApiKey(), "API- KEY"))();
+    app.listen(env_config_1.PORT || 3000, () => {
+        console.log(`Server running\nListening on port:${env_config_1.PORT}`);
+    });
+}
+catch (e) {
+    console.log(e, "EEE");
+}

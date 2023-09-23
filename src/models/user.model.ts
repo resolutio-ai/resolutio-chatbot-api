@@ -9,18 +9,19 @@ export const userSchema = new Schema<IUser>({
             _id: { type: String },
             messages: [
                 {
-                    id: { type: Schema.Types.ObjectId},
-                    authorRole: { type: Roles, required: true },
+                    id: { type: Schema.Types.ObjectId },
+                    authorRole: { type: String, enum: Roles, required: true },
                     content: {
-                        content_type: { type: ContentType, required: true },
-                        parts: [String]
+                        contentType: { type: String, enum: ContentType, required: true },
+                        parts: [String],
+                        cid: String
                     },
-                    status: { type: Status, required: true },
-                    timestamp: String
+                    status: { type: String, enum: Status, required: true },
+                    timestamp: Date
                 },
             ]
         }], required: false
     }
 });
 
-export const userModel = model("User", userSchema);
+export const User = model<IUser>("User", userSchema);

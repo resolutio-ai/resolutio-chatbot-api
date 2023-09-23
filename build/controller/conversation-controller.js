@@ -10,8 +10,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ConversationController = void 0;
-//import { userModel } from "../models/user.model";
+const user_model_1 = require("../models/user.model");
 const constants_utils_1 = require("../utils/constants.utils");
+const upload_1 = require("./lighthouse/upload");
 class ConversationController {
     getPreviousConversations(request, response) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -19,7 +20,7 @@ class ConversationController {
             if (!userId) {
                 response.status(constants_utils_1.BAD_REQUEST).send({ message: "Invalid UserId" });
             }
-            // let user = await userModel.findById(userId);
+            let user = yield user_model_1.User.findById(userId);
             // return response.status(OK).send(user);
             response.status(constants_utils_1.OK).send({
                 "userId": userId,
@@ -39,7 +40,7 @@ class ConversationController {
                             },
                             {
                                 "id": "message2",
-                                //"authorRole": Roles.System,
+                                "authorRole": constants_utils_1.Roles.System,
                                 "content": {
                                     "contentType": constants_utils_1.ContentType.Text,
                                     "parts": ["I'm good. How can I assist you today?"]
@@ -59,7 +60,7 @@ class ConversationController {
                             },
                             {
                                 "id": "message4",
-                                //"authorRole": Roles.System,
+                                "authorRole": constants_utils_1.Roles.System,
                                 "content": {
                                     "content_type": constants_utils_1.ContentType.Text,
                                     "parts": ["What would you like to know?"]
@@ -84,7 +85,7 @@ class ConversationController {
                             },
                             {
                                 "id": "message2",
-                                //"authorRole": Roles.System,
+                                "authorRole": constants_utils_1.Roles.System,
                                 "content": {
                                     "contentType": constants_utils_1.ContentType.Text,
                                     "parts": ["Intellectual property rights are the rights given to persons over the creations of their minds."]
@@ -104,7 +105,7 @@ class ConversationController {
                             },
                             {
                                 "id": "message4",
-                                //"authorRole": Roles.System,
+                                "authorRole": constants_utils_1.Roles.System,
                                 "content": {
                                     "content_type": constants_utils_1.ContentType.Text,
                                     "parts": ["Patents, trademarks, copyrights, and trade secrets are valuable assets of the company and understanding how they work and how they are created is critical to knowing how to protect them"]
@@ -155,33 +156,35 @@ class ConversationController {
         });
     }
     saveMessageToDB(request) {
+        var _a, _b, _c;
         return __awaiter(this, void 0, void 0, function* () {
-            // let user = await userModel.findById(request.userId)
-            // if (!user) {
-            //     user = await userModel.create({
-            //         userId: request.userId,
-            //         conversations: []
-            //     });
-            // }
-            // const uploadResponse = await uploadText(JSON.stringify(request));
-            // if (!uploadResponse?.data?.cid) {
-            //     //Log                
-            // } else {
-            //     const userConversation = user.conversations[ZERO];
-            //     const messageId = userConversation.messages.length++ ?? ONE;
-            //     userConversation.messages.push({
-            //         authorRole: Roles.User,
-            //         content: {
-            //             contentType: ContentType.Text,
-            //             parts: [request.messageContent, request.chatbotReply],
-            //             cid: uploadResponse?.data?.cid
-            //         },
-            //         id: `${messageId}`,
-            //         status: Status.Received,
-            //         timeStamp: request.timeStamp
-            //     });
-            //     await user.save();
-            // }
+            let user = yield user_model_1.User.findById(request.userId);
+            if (!user) {
+                user = yield user_model_1.User.create({
+                    userId: request.userId,
+                    conversations: []
+                });
+            }
+            const uploadResponse = yield (0, upload_1.uploadText)(JSON.stringify(request));
+            if (!((_a = uploadResponse === null || uploadResponse === void 0 ? void 0 : uploadResponse.data) === null || _a === void 0 ? void 0 : _a.cid)) {
+                //Log                
+            }
+            else {
+                const userConversation = user.conversations[constants_utils_1.ZERO];
+                const messageId = (_b = userConversation.messages.length++) !== null && _b !== void 0 ? _b : constants_utils_1.ONE;
+                userConversation.messages.push({
+                    authorRole: constants_utils_1.Roles.User,
+                    content: {
+                        contentType: constants_utils_1.ContentType.Text,
+                        parts: [request.messageContent, request.chatbotReply],
+                        cid: (_c = uploadResponse === null || uploadResponse === void 0 ? void 0 : uploadResponse.data) === null || _c === void 0 ? void 0 : _c.cid
+                    },
+                    id: `${messageId}`,
+                    status: constants_utils_1.Status.Received,
+                    timeStamp: request.timeStamp
+                });
+                yield user.save();
+            }
         });
     }
 }

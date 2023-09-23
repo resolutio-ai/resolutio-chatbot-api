@@ -8,7 +8,7 @@ exports.corsOptions = {
 //Enums
 var Roles;
 (function (Roles) {
-    Roles[Roles["Syst12m"] = 0] = "Syst12m";
+    Roles[Roles["System"] = 0] = "System";
     Roles[Roles["User"] = 1] = "User";
 })(Roles || (exports.Roles = Roles = {}));
 ;

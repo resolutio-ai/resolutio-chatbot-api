@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.userSchema = void 0;
+exports.User = exports.userSchema = void 0;
 const mongoose_1 = require("mongoose");
 const constants_utils_1 = require("../utils/constants.utils");
 exports.userSchema = new mongoose_1.Schema({
@@ -11,16 +11,17 @@ exports.userSchema = new mongoose_1.Schema({
                 messages: [
                     {
                         id: { type: mongoose_1.Schema.Types.ObjectId },
-                        authorRole: { type: constants_utils_1.Roles, required: true },
+                        authorRole: { type: String, enum: constants_utils_1.Roles, required: true },
                         content: {
-                            content_type: { type: constants_utils_1.ContentType, required: true },
-                            parts: [String]
+                            contentType: { type: String, enum: constants_utils_1.ContentType, required: true },
+                            parts: [String],
+                            cid: String
                         },
-                        status: { type: constants_utils_1.Status, required: true },
-                        timestamp: String
+                        status: { type: String, enum: constants_utils_1.Status, required: true },
+                        timestamp: Date
                     },
                 ]
             }], required: false
     }
 });
-//export const userModel = model("User", userSchema);
+exports.User = (0, mongoose_1.model)("User", exports.userSchema);

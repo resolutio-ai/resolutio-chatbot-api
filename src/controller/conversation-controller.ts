@@ -1,4 +1,4 @@
-import { userModel } from "../models/user.model";
+import { User } from "../models/user.model";
 import { BAD_REQUEST, ContentType, OK, ONE, Roles, Status, ZERO } from "../utils/constants.utils";
 import { Request, Response } from "express";
 import { uploadText } from "./lighthouse/upload";
@@ -11,9 +11,9 @@ export class ConversationController {
             response.status(BAD_REQUEST).send({ message: "Invalid UserId" })
         }
 
-       //let user = await userModel.findById(userId);
+        let user = await User.findById(userId);
 
-       // return response.status(OK).send(user);
+        // return response.status(OK).send(user);
 
         response.status(OK).send({
             "userId": userId,
@@ -33,7 +33,7 @@ export class ConversationController {
                         },
                         {
                             "id": "message2",
-                            //"authorRole": Roles.System,
+                            "authorRole": Roles.System,
                             "content": {
                                 "contentType": ContentType.Text,
                                 "parts": ["I'm good. How can I assist you today?"]
@@ -53,7 +53,7 @@ export class ConversationController {
                         },
                         {
                             "id": "message4",
-                            //"authorRole": Roles.System,
+                            "authorRole": Roles.System,
                             "content": {
                                 "content_type": ContentType.Text,
                                 "parts": ["What would you like to know?"]
@@ -78,7 +78,7 @@ export class ConversationController {
                         },
                         {
                             "id": "message2",
-                            //"authorRole": Roles.System,
+                            "authorRole": Roles.System,
                             "content": {
                                 "contentType": ContentType.Text,
                                 "parts": ["Intellectual property rights are the rights given to persons over the creations of their minds."]
@@ -98,7 +98,7 @@ export class ConversationController {
                         },
                         {
                             "id": "message4",
-                            //"authorRole": Roles.System,
+                            "authorRole": Roles.System,
                             "content": {
                                 "content_type": ContentType.Text,
                                 "parts": ["Patents, trademarks, copyrights, and trade secrets are valuable assets of the company and understanding how they work and how they are created is critical to knowing how to protect them"]
@@ -158,35 +158,35 @@ export class ConversationController {
         timeStamp: Date,
         userId: string
     }) {
-        // let user = await userModel.findById(request.userId)
+        let user = await User.findById(request.userId)
 
-        // if (!user) {
-        //     user = await userModel.create({
-        //         userId: request.userId,
-        //         conversations: []
-        //     });
-        // }
+        if (!user) {
+            user = await User.create({
+                userId: request.userId,
+                conversations: []
+            });
+        }
 
-        // const uploadResponse = await uploadText(JSON.stringify(request));
+        const uploadResponse = await uploadText(JSON.stringify(request));
 
-        // if (!uploadResponse?.data?.cid) {
-        //     //Log                
-        // } else {
-        //     const userConversation = user.conversations[ZERO];
-        //     const messageId = userConversation.messages.length++ ?? ONE;
-        //     userConversation.messages.push({
-        //         authorRole: Roles.User,
-        //         content: {
-        //             contentType: ContentType.Text,
-        //             parts: [request.messageContent, request.chatbotReply],
-        //             cid: uploadResponse?.data?.cid
-        //         },
-        //         id: `${messageId}`,
-        //         status: Status.Received,
-        //         timeStamp: request.timeStamp
-        //     });
+        if (!uploadResponse?.data?.cid) {
+            //Log                
+        } else {
+            const userConversation = user.conversations[ZERO];
+            const messageId = userConversation.messages.length++ ?? ONE;
+            userConversation.messages.push({
+                authorRole: Roles.User,
+                content: {
+                    contentType: ContentType.Text,
+                    parts: [request.messageContent, request.chatbotReply],
+                    cid: uploadResponse?.data?.cid
+                },
+                id: `${messageId}`,
+                status: Status.Received,
+                timeStamp: request.timeStamp
+            });
 
-        //     await user.save();
-        // }
+            await user.save();
+        }
     }
 }

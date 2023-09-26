@@ -11,7 +11,7 @@ export class ConversationController {
             response.status(BAD_REQUEST).send({ message: "Invalid UserId" })
         }
 
-        let user = await User.findById(userId);
+        //let user = await User.findById(userId);
 
         // return response.status(OK).send(user);
 

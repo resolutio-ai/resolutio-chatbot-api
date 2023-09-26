@@ -14,12 +14,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
-const database_config_1 = require("./config/database.config");
 const routes_1 = require("./routes");
 const constants_utils_1 = require("./utils/constants.utils");
 const env_config_1 = require("./config/env.config");
 const app = (0, express_1.default)();
-(0, database_config_1.connectDatabase)();
+//connectDatabase();
 app.use((0, cors_1.default)(constants_utils_1.corsOptions));
 app.get("/", (_, res) => __awaiter(void 0, void 0, void 0, function* () {
     res.status(200).send("Welcome to Resolutio Chatbot :)");

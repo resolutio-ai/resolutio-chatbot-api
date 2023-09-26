@@ -117,7 +117,7 @@ export class ConversationController {
         const { userId, messageContent, conversationId, timeStamp, isLoggedIn } = request.body;
 
         //chatbot AI interaction
-        const chatbotReply: string = ""
+        const chatbotReply: string = "A copyright is the exclusive and assignable legal right, given to the originator for a fixed number of years, to print, publish, perform, film, or record literary, artistic, or musical material."
 
         if (isLoggedIn) {
             const messageRecord = {

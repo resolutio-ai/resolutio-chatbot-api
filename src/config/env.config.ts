@@ -13,6 +13,7 @@ export const PORT = validateEnvVariable('PORT');
 export const GET_APIKEY_ENDPOINT = validateEnvVariable('GET_APIKEY_ENDPOINT');
 export const SIGNED_MESSAGE = validateEnvVariable('SIGNED_MESSAGE');
 export const GATEWAY_BASEURL = validateEnvVariable('GATEWAY_BASEURL');
+export const CHATBOT_BASEURL = validateEnvVariable('CHATBOT_BASEURL');
 
 // Helper function to validate environment variables
 function validateEnvVariable(variableName: string) {

@@ -78,8 +78,7 @@ class ConversationController {
                 message: messageContent,
                 timeStamp
             })).data;
-            //chatbot AI interaction
-            const chatbotReply = chatbotResponse.result;
+            const chatbotReply = chatbotResponse.result.toString().trim();
             if (isLoggedIn) {
                 const messageRecord = {
                     messageContent,

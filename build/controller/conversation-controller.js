@@ -8,11 +8,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ConversationController = void 0;
 const user_model_1 = require("../models/user.model");
 const constants_utils_1 = require("../utils/constants.utils");
 const upload_1 = require("./lighthouse/upload");
+const axios_1 = __importDefault(require("axios"));
+const env_config_1 = require("../config/env.config");
 class ConversationController {
     getPreviousConversations(request, response) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -20,7 +25,7 @@ class ConversationController {
             if (!userId) {
                 response.status(constants_utils_1.BAD_REQUEST).send({ message: "Invalid UserId" });
             }
-            let user = yield user_model_1.User.findById(userId);
+            //let user = await User.findById(userId);
             // return response.status(OK).send(user);
             response.status(constants_utils_1.OK).send({
                 "userId": userId,
@@ -33,27 +38,17 @@ class ConversationController {
                                 "authorRole": constants_utils_1.Roles.User,
                                 "content": {
                                     "contentType": constants_utils_1.ContentType.Text,
-                                    "parts": ["Hello, how are you?"]
+                                    "parts": ["Hello, how are you?", "I'm good. How can I assist you today?"]
                                 },
                                 "status": constants_utils_1.Status.Sent,
                                 "timestamp": "2023-09-11T12:00:00Z"
-                            },
-                            {
-                                "id": "message2",
-                                "authorRole": constants_utils_1.Roles.System,
-                                "content": {
-                                    "contentType": constants_utils_1.ContentType.Text,
-                                    "parts": ["I'm good. How can I assist you today?"]
-                                },
-                                "status": constants_utils_1.Status.Received,
-                                "timestamp": "2023-09-11T12:10:00Z"
                             },
                             {
                                 "id": "message3",
                                 "authorRole": constants_utils_1.Roles.User,
                                 "content": {
                                     "content_type": constants_utils_1.ContentType.Text,
-                                    "parts": ["I have a question about my account."]
+                                    "parts": ["I have a question about my account.", "What would you like to know?"]
                                 },
                                 "status": constants_utils_1.Status.Sent,
                                 "timestamp": "2023-09-11T12:10:00Z"
@@ -63,58 +58,13 @@ class ConversationController {
                                 "authorRole": constants_utils_1.Roles.System,
                                 "content": {
                                     "content_type": constants_utils_1.ContentType.Text,
-                                    "parts": ["What would you like to know?"]
+                                    "parts": ["What are intellectual property rights?", "Intellectual property rights are the rights given to persons over the creations of their minds."]
                                 },
                                 "status": constants_utils_1.Status.Received,
                                 "timestamp": "2023-09-11T12:10:00Z"
                             },
                         ]
-                    },
-                    {
-                        "_id": "conversation2",
-                        "messages": [
-                            {
-                                "id": "message1",
-                                "authorRole": constants_utils_1.Roles.User,
-                                "content": {
-                                    "contentType": constants_utils_1.ContentType.Text,
-                                    "parts": ["What is IP rights?"]
-                                },
-                                "status": constants_utils_1.Status.Sent,
-                                "timestamp": "2023-09-11T12:00:00Z"
-                            },
-                            {
-                                "id": "message2",
-                                "authorRole": constants_utils_1.Roles.System,
-                                "content": {
-                                    "contentType": constants_utils_1.ContentType.Text,
-                                    "parts": ["Intellectual property rights are the rights given to persons over the creations of their minds."]
-                                },
-                                "status": constants_utils_1.Status.Received,
-                                "timestamp": "2023-09-11T12:10:00Z"
-                            },
-                            {
-                                "id": "message3",
-                                "authorRole": constants_utils_1.Roles.User,
-                                "content": {
-                                    "content_type": constants_utils_1.ContentType.Text,
-                                    "parts": ["Awesome. What are some of mine?"]
-                                },
-                                "status": constants_utils_1.Status.Sent,
-                                "timestamp": "2023-09-11T12:10:00Z"
-                            },
-                            {
-                                "id": "message4",
-                                "authorRole": constants_utils_1.Roles.System,
-                                "content": {
-                                    "content_type": constants_utils_1.ContentType.Text,
-                                    "parts": ["Patents, trademarks, copyrights, and trade secrets are valuable assets of the company and understanding how they work and how they are created is critical to knowing how to protect them"]
-                                },
-                                "status": constants_utils_1.Status.Received,
-                                "timestamp": "2023-09-11T12:10:00Z"
-                            },
-                        ]
-                    },
+                    }
                 ]
             });
         });
@@ -122,8 +72,14 @@ class ConversationController {
     sendUserMessage(request, response) {
         return __awaiter(this, void 0, void 0, function* () {
             const { userId, messageContent, conversationId, timeStamp, isLoggedIn } = request.body;
+            const chatbotResponse = (yield axios_1.default.post(`${env_config_1.CHATBOT_BASEURL}/bot`, {
+                userId,
+                category: "General IP Queries",
+                message: messageContent,
+                timeStamp
+            })).data;
             //chatbot AI interaction
-            const chatbotReply = "A copyright is the exclusive and assignable legal right, given to the originator for a fixed number of years, to print, publish, perform, film, or record literary, artistic, or musical material.";
+            const chatbotReply = chatbotResponse.result;
             if (isLoggedIn) {
                 const messageRecord = {
                     messageContent,

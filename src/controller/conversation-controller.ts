@@ -2,6 +2,8 @@ import { User } from "../models/user.model";
 import { BAD_REQUEST, ContentType, OK, ONE, Roles, Status, ZERO } from "../utils/constants.utils";
 import { Request, Response } from "express";
 import { uploadText } from "./lighthouse/upload";
+import axios from "axios";
+import { CHATBOT_BASEURL } from "../config/env.config";
 
 export class ConversationController {
     async getPreviousConversations(request: Request, response: Response) {
@@ -61,8 +63,19 @@ export class ConversationController {
     async sendUserMessage(request: Request, response: Response) {
         const { userId, messageContent, conversationId, timeStamp, isLoggedIn } = request.body;
 
-        //chatbot AI interaction
-        const chatbotReply: string = "A copyright is the exclusive and assignable legal right, given to the originator for a fixed number of years, to print, publish, perform, film, or record literary, artistic, or musical material."
+        const chatbotResponse = (
+            await axios.post(
+                `${CHATBOT_BASEURL}/bot`,
+                {
+                    userId,
+                    category: "General IP Queries",
+                    message: messageContent,
+                    timeStamp
+                }
+            )
+        ).data; 
+
+        const chatbotReply: string = chatbotResponse.result.toString().trim();
 
         if (isLoggedIn) {
             const messageRecord = {

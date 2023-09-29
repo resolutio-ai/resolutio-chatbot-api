@@ -70,44 +70,51 @@ class ConversationController {
         });
     }
     sendUserMessage(request, response) {
+        var _a, _b;
         return __awaiter(this, void 0, void 0, function* () {
-            const { userId, messageContent, conversationId, timeStamp, isLoggedIn } = request.body;
-            const chatbotResponse = (yield axios_1.default.post(`${env_config_1.CHATBOT_BASEURL}/bot`, {
-                userId,
-                category: "General IP Queries",
-                message: messageContent,
-                timeStamp
-            })).data;
-            const chatbotReply = chatbotResponse.result.toString().trim();
-            if (isLoggedIn) {
-                const messageRecord = {
-                    messageContent,
-                    chatbotReply,
-                    timeStamp,
-                    userId
-                };
-                yield this.saveMessageToDB(messageRecord);
+            try {
+                const { userId, messageContent, conversationId, timeStamp, isLoggedIn } = request.body;
+                const chatbotResponse = (yield axios_1.default.post(`${env_config_1.CHATBOT_BASEURL}/bot`, {
+                    userId,
+                    category: "General IP Queries",
+                    message: messageContent,
+                    timeStamp
+                })).data;
+                const chatbotReply = chatbotResponse.result.toString().trim();
+                // if (isLoggedIn) {
+                //     const messageRecord = {
+                //         messageContent,
+                //         chatbotReply,
+                //         timeStamp,
+                //         userId
+                //     }
+                //     await this.saveMessageToDB(messageRecord);
+                // }
+                return response.status(constants_utils_1.OK).send({
+                    userId: userId,
+                    conversationIds: [
+                        {
+                            _id: "conversation2",
+                            messages: [
+                                {
+                                    id: "message1",
+                                    authorRole: constants_utils_1.Roles.User,
+                                    content: {
+                                        "contentType": constants_utils_1.ContentType.Text,
+                                        "parts": [messageContent, chatbotReply]
+                                    },
+                                    status: constants_utils_1.Status.Sent,
+                                    timeStamp
+                                }
+                            ]
+                        },
+                    ]
+                });
             }
-            return response.status(constants_utils_1.OK).send({
-                userId: userId,
-                conversationIds: [
-                    {
-                        _id: "conversation2",
-                        messages: [
-                            {
-                                id: "message1",
-                                authorRole: constants_utils_1.Roles.User,
-                                content: {
-                                    "contentType": constants_utils_1.ContentType.Text,
-                                    "parts": [messageContent, chatbotReply]
-                                },
-                                status: constants_utils_1.Status.Sent,
-                                timeStamp
-                            }
-                        ]
-                    },
-                ]
-            });
+            catch (error) {
+                console.log(error.response);
+                return response.status((_b = (_a = error === null || error === void 0 ? void 0 : error.response) === null || _a === void 0 ? void 0 : _a.status) !== null && _b !== void 0 ? _b : constants_utils_1.BAD_REQUEST).send(error.message);
+            }
         });
     }
     saveMessageToDB(request) {

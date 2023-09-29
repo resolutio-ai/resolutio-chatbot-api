@@ -61,53 +61,61 @@ export class ConversationController {
     }
 
     async sendUserMessage(request: Request, response: Response) {
-        const { userId, messageContent, conversationId, timeStamp, isLoggedIn } = request.body;
+        try {
+            const { userId, messageContent, conversationId, timeStamp, isLoggedIn } = request.body;
 
-        const chatbotResponse = (
-            await axios.post(
-                `${CHATBOT_BASEURL}/bot`,
-                {
-                    userId,
-                    category: "General IP Queries",
-                    message: messageContent,
-                    timeStamp
-                }
-            )
-        ).data; 
-
-        const chatbotReply: string = chatbotResponse.result.toString().trim();
-
-        if (isLoggedIn) {
-            const messageRecord = {
-                messageContent,
-                chatbotReply,
-                timeStamp,
-                userId
+            if(!messageContent || !timeStamp){
+                return response.status(BAD_REQUEST).send({ message: !messageContent ? "Invalid 'messageContent' value" : "Invalid 'timeStamp' value"})
             }
 
-            await this.saveMessageToDB(messageRecord);
-        }
+            const chatbotResponse = (
+                await axios.post(
+                    `${CHATBOT_BASEURL}/bot`,
+                    {
+                        userId: userId ?? "",
+                        category: "General IP Queries",
+                        message: messageContent,
+                        timeStamp
+                    }
+                )
+            ).data;
 
-        return response.status(OK).send({
-            userId: userId,
-            conversationIds: [
-                {
-                    _id: "conversation2",
-                    messages: [
-                        {
-                            id: "message1",
-                            authorRole: Roles.User,
-                            content: {
-                                "contentType": ContentType.Text,
-                                "parts": [messageContent, chatbotReply]
-                            },
-                            status: Status.Sent,
-                            timeStamp
-                        }
-                    ]
-                },
-            ]
-        });
+            const chatbotReply: string = chatbotResponse.result.toString().trim();
+
+            // if (isLoggedIn) {
+            //     const messageRecord = {
+            //         messageContent,
+            //         chatbotReply,
+            //         timeStamp,
+            //         userId
+            //     }
+
+            //     await this.saveMessageToDB(messageRecord);
+            // }
+
+            return response.status(OK).send({
+                userId: userId,
+                conversationIds: [
+                    {
+                        _id: "conversation2",
+                        messages: [
+                            {
+                                id: "message1",
+                                authorRole: Roles.User,
+                                content: {
+                                    "contentType": ContentType.Text,
+                                    "parts": [messageContent, chatbotReply]
+                                },
+                                status: Status.Sent,
+                                timeStamp
+                            }
+                        ]
+                    },
+                ]
+            });
+        } catch (error: any) {
+            return response.status(error?.response?.status ?? BAD_REQUEST).send(error?.response?.statusText ?? error.message)
+        }
     }
 
     private async saveMessageToDB(request: {
@@ -116,35 +124,39 @@ export class ConversationController {
         timeStamp: Date,
         userId: string
     }) {
-        let user = await User.findById(request.userId)
+        try {
+            let user = await User.findById(request.userId)
 
-        if (!user) {
-            user = await User.create({
-                userId: request.userId,
-                conversations: []
-            });
-        }
+            if (!user) {
+                user = await User.create({
+                    userId: request.userId,
+                    conversations: []
+                });
+            }
 
-        const uploadResponse = await uploadText(JSON.stringify(request));
+            const uploadResponse = await uploadText(JSON.stringify(request));
 
-        if (!uploadResponse?.data?.cid) {
-            //Log                
-        } else {
-            const userConversation = user.conversations[ZERO];
-            const messageId = userConversation.messages.length++ ?? ONE;
-            userConversation.messages.push({
-                authorRole: Roles.User,
-                content: {
-                    contentType: ContentType.Text,
-                    parts: [request.messageContent, request.chatbotReply],
-                    cid: uploadResponse?.data?.cid
-                },
-                id: `${messageId}`,
-                status: Status.Received,
-                timeStamp: request.timeStamp
-            });
+            if (!uploadResponse?.data?.cid) {
+                //Log                
+            } else {
+                const userConversation = user.conversations[ZERO];
+                const messageId = userConversation.messages.length++ ?? ONE;
+                userConversation.messages.push({
+                    authorRole: Roles.User,
+                    content: {
+                        contentType: ContentType.Text,
+                        parts: [request.messageContent, request.chatbotReply],
+                        cid: uploadResponse?.data?.cid
+                    },
+                    id: `${messageId}`,
+                    status: Status.Received,
+                    timeStamp: request.timeStamp
+                });
 
-            await user.save();
+                await user.save();
+            }
+        } catch(error: any) {
+            throw error;
         }
     }
 }

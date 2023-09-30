@@ -6,7 +6,7 @@ import axios from "axios";
 import { CHATBOT_BASEURL } from "../config/env.config";
 import { IConversation } from "../models/interfaces.models";
 import { decrypt } from "./lighthouse/decrypt";
-import { accessControl } from "./lighthouse/accesscontrol";
+import { applyAccessControl } from "./lighthouse/accesscontrol";
 
 export class ConversationController {
     async sendUserMessage(request: Request, response: Response) {

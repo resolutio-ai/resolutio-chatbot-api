@@ -1,71 +1,19 @@
 import { User } from "../models/user.model";
-import { BAD_REQUEST, ContentType, OK, ONE, Roles, Status, ZERO } from "../utils/constants.utils";
+import { BAD_REQUEST, ContentType, INTERNAL_SERVER_ERROR, NOT_FOUND, OK, ONE, Roles, Status, ZERO } from "../utils/constants.utils";
 import { Request, Response } from "express";
 import { uploadText } from "./lighthouse/upload";
 import axios from "axios";
 import { CHATBOT_BASEURL } from "../config/env.config";
+import { IConversation } from "../models/interfaces.models";
+import { decrypt } from "./lighthouse/decrypt";
 
 export class ConversationController {
-    async getPreviousConversations(request: Request, response: Response) {
-        const { userId } = request.query;
-
-        if (!userId) {
-            response.status(BAD_REQUEST).send({ message: "Invalid UserId" })
-        }
-
-        //let user = await User.findById(userId);
-
-        // return response.status(OK).send(user);
-
-        response.status(OK).send({
-            "userId": userId,
-            "conversationIds": [
-                {
-                    "_id": "conversation1",
-                    "messages": [
-                        {
-                            "id": "message1",
-                            "authorRole": Roles.User,
-                            "content": {
-                                "contentType": ContentType.Text,
-                                "parts": ["Hello, how are you?", "I'm good. How can I assist you today?"]
-                            },
-                            "status": Status.Sent,
-                            "timestamp": "2023-09-11T12:00:00Z"
-                        },
-                        {
-                            "id": "message3",
-                            "authorRole": Roles.User,
-                            "content": {
-                                "content_type": ContentType.Text,
-                                "parts": ["I have a question about my account.", "What would you like to know?"]
-                            },
-                            "status": Status.Sent,
-                            "timestamp": "2023-09-11T12:10:00Z"
-                        },
-                        {
-                            "id": "message4",
-                            "authorRole": Roles.System,
-                            "content": {
-                                "content_type": ContentType.Text,
-                                "parts": ["What are intellectual property rights?", "Intellectual property rights are the rights given to persons over the creations of their minds."]
-                            },
-                            "status": Status.Received,
-                            "timestamp": "2023-09-11T12:10:00Z"
-                        },
-                    ]
-                }
-            ]
-        });
-
-    }
-
     async sendUserMessage(request: Request, response: Response) {
         try {
             const { userId, messageContent, conversationId, timeStamp, isLoggedIn } = request.body;
 
-            if(!messageContent || !timeStamp){
-                return response.status(BAD_REQUEST).send({ message: !messageContent ? "Invalid 'messageContent' value" : "Invalid 'timeStamp' value"})
+            if (!messageContent || !timeStamp) {
+                return response.status(BAD_REQUEST).send({ message: !messageContent ? "Invalid 'messageContent' value" : "Invalid 'timeStamp' value" })
             }
 
             const chatbotResponse = (
@@ -80,18 +28,22 @@ export class ConversationController {
                 )
             ).data;
 
+            if (!chatbotResponse.result) {
+                return response.status(INTERNAL_SERVER_ERROR).send({ message: "Chatbot Server Error" });
+            }
+
             const chatbotReply: string = chatbotResponse.result.toString().trim();
 
-            // if (isLoggedIn) {
-            //     const messageRecord = {
-            //         messageContent,
-            //         chatbotReply,
-            //         timeStamp,
-            //         userId
-            //     }
+            if (isLoggedIn) {
+                const messageRecord = {
+                    messageContent,
+                    chatbotReply,
+                    timeStamp,
+                    userId
+                }
 
-            //     await this.saveMessageToDB(messageRecord);
-            // }
+                await this.saveMessageToDB(messageRecord);
+            }
 
             return response.status(OK).send({
                 userId: userId,
@@ -137,7 +89,7 @@ export class ConversationController {
             const uploadResponse = await uploadText(JSON.stringify(request));
 
             if (!uploadResponse?.data?.cid) {
-                //Log                
+                throw new Error("");
             } else {
                 const userConversation = user.conversations[ZERO];
                 const messageId = userConversation.messages.length++ ?? ONE;
@@ -155,8 +107,88 @@ export class ConversationController {
 
                 await user.save();
             }
-        } catch(error: any) {
+        } catch (error: any) {
             throw error;
         }
     }
+
+    private async retrieveAndDecryptMessages(conversation: IConversation) {
+        const userMessagesPromises = conversation.messages.map(async (message, index) => {
+            if (!message?.content?.cid) {
+                throw new Error(`Error: Message at ${index} does not have a valid CID`);
+            }
+            const decryptedInfo = await decrypt(message.content.cid);
+
+            if (!decryptedInfo) {
+                throw new Error(`Error decrypting ${message?.content?.cid}`);
+            }
+
+            return decryptedInfo;
+        });
+
+        return await Promise.all(userMessagesPromises);
+    }
+
+    async getPreviousConversations2(request: Request, response: Response) {
+        const { userId } = request.query;
+
+        if (!userId) {
+            return response.status(BAD_REQUEST).send({ message: "Invalid UserId" });
+        }
+
+        // try {
+        //     let user = await User.findById(userId);
+
+        //     if (!user) {
+        //         return response.status(NOT_FOUND).send({ message: "User not found" });
+        //     }
+
+        //     const userMessages = await this.retrieveAndDecryptMessages(user.conversations[ZERO]);
+            
+        //     return response.status(OK).send({ user, userMessages });
+        // } catch (error) {
+        //     return response.status(INTERNAL_SERVER_ERROR).send({ message: "Error retrieving previous conversations" });
+        // }
+
+        response.status(OK).send({
+            "userId": userId,
+            "conversationIds": [
+                {
+                    "_id": "conversation1",
+                    "messages": [
+                        {
+                            "id": "message1",
+                            "authorRole": Roles.User,
+                            "content": {
+                                "contentType": ContentType.Text,
+                                "parts": ["Hello, how are you?", "I'm good. How can I assist you today?"]
+                            },
+                            "status": Status.Sent,
+                            "timestamp": "2023-09-11T12:00:00Z"
+                        },
+                        {
+                            "id": "message3",
+                            "authorRole": Roles.User,
+                            "content": {
+                                "content_type": ContentType.Text,
+                                "parts": ["I have a question about my account.", "What would you like to know?"]
+                            },
+                            "status": Status.Sent,
+                            "timestamp": "2023-09-11T12:10:00Z"
+                        },
+                        {
+                            "id": "message4",
+                            "authorRole": Roles.System,
+                            "content": {
+                                "content_type": ContentType.Text,
+                                "parts": ["What are intellectual property rights?", "Intellectual property rights are the rights given to persons over the creations of their minds."]
+                            },
+                            "status": Status.Received,
+                            "timestamp": "2023-09-11T12:10:00Z"
+                        },
+                    ]
+                }
+            ]
+        });
+    }   
 }

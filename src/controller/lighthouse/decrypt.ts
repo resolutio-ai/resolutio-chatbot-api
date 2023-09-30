@@ -4,14 +4,7 @@ import fs from "fs";
 import { ethers } from "ethers";
 import lighthouse from '@lighthouse-web3/sdk';
 import { PRIVATE_KEY, PUBLIC_KEY } from '../../config/env.config';
-
-const signAuthMessage = async () => {
-    const provider = new ethers.JsonRpcProvider();
-    const signer = new ethers.Wallet(PRIVATE_KEY, provider);
-    const messageRequested = (await lighthouse.getAuthMessage(PUBLIC_KEY)).data.message;
-    const signedMessage = await signer.signMessage(messageRequested);
-    return signedMessage;
-}
+import { signAuthMessage } from './signAuthMessage';
 
 export const decrypt = async (cid: string) => {
 

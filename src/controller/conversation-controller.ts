@@ -6,6 +6,7 @@ import axios from "axios";
 import { CHATBOT_BASEURL } from "../config/env.config";
 import { IConversation } from "../models/interfaces.models";
 import { decrypt } from "./lighthouse/decrypt";
+import { accessControl } from "./lighthouse/accesscontrol";
 
 export class ConversationController {
     async sendUserMessage(request: Request, response: Response) {
@@ -93,6 +94,10 @@ export class ConversationController {
             } else {
                 const userConversation = user.conversations[ZERO];
                 const messageId = userConversation.messages.length++ ?? ONE;
+
+                //NB: Our current verfication contract is deployed on FVM mainnet which is currently not part of the access control allowed chains         
+                //await applyAccessControl(uploadResponse?.data?.cid);
+
                 userConversation.messages.push({
                     authorRole: Roles.User,
                     content: {

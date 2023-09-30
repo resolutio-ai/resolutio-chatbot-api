@@ -90,7 +90,7 @@ export class ConversationController {
             const uploadResponse = await uploadText(JSON.stringify(request));
 
             if (!uploadResponse?.data?.cid) {
-                throw new Error("");
+                throw new Error("Error uploading to light house");
             } else {
                 const userConversation = user.conversations[ZERO];
                 const messageId = userConversation.messages.length++ ?? ONE;
@@ -134,7 +134,7 @@ export class ConversationController {
         return await Promise.all(userMessagesPromises);
     }
 
-    async getPreviousConversations2(request: Request, response: Response) {
+    async getPreviousConversations(request: Request, response: Response) {
         const { userId } = request.query;
 
         if (!userId) {

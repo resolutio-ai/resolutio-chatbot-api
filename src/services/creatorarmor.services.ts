@@ -4,10 +4,11 @@ import { CreatedWork } from "../models/creatorarmor.schema";
 import { executeUserOp, getPartialUserOp } from "../integrations/biconomy";
 import { ethers } from "ethers";
 import { getNetworkConfig } from "../utils/network.utils";
+import { Address } from "viem";
 
 class CreateArmourService {
 
-    getFiles = async (cid: string, chainname: string) => {
+    getFiles = async (cid: string) => {
         const files = await retrieveFiles(cid);
 
         if (files.length === 0) {

@@ -15,7 +15,7 @@ class CreatorArmourController {
         let work: CreatedWork | null = null;
 
         try {
-            work = await creatorarmourServices.getFiles(cid as string, chainName as string);
+            work = await creatorarmourServices.getFiles(cid as string);
         } catch (error: any) {
             return response.status(INTERNAL_SERVER_ERROR).
                 send({

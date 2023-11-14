@@ -24,6 +24,12 @@ interface NetworkConfig extends indexable {
 }
 
 const networkConfig: NetworkConfig = {
+    FVMTestNet: {
+        rpcUrl: "https://rpc.ankr.com/filecoin_testnet",
+        chainId: 314159,
+        explorerUrl: "https://beryx.zondax.ch/",
+        contractAddress: ""
+    },
     polygonTestnet: {
         rpcUrl: "https://rpc.ankr.com/polygon_mumbai",
         chainId: 80001,

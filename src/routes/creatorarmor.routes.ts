@@ -3,7 +3,8 @@ import creatorarmourController from "../controller/creatorarmour.controller";
 
 const creatorArmorRouter = express.Router();
 
-creatorArmorRouter.post("/", creatorarmourController.createTimeStamp)
+creatorArmorRouter
+    .post("/", creatorarmourController.createTimeStamp)
     .get("/", creatorarmourController.getCreatedWork)
 
 export default creatorArmorRouter;

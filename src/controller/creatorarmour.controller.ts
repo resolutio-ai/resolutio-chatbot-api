@@ -27,7 +27,8 @@ class CreatorArmourController {
     }
 
     createTimeStamp = async (request: Request, response: Response) => {
-        const { files, chainName } = request.body;
+        const files = request.files as Express.Multer.File[];
+        const { chainName } = request.query;
 
         if (!files || files.length < ONE || !chainName) {
             return response.status(BAD_REQUEST).send({ message: "Invalid Parameters Sent" });
@@ -37,9 +38,15 @@ class CreatorArmourController {
         let hash;
 
         try {
-            cid = await storeFiles(files);
+            const filesArray = files.map(multerFile => {
+                const { originalname, mimetype, buffer } = multerFile;
 
-            hash = await creatorarmourServices.getTimeStampHash(cid as string, chainName);
+                return new File([buffer], originalname, { type: mimetype });
+            });
+
+            cid = await storeFiles(filesArray);
+
+            hash = await creatorarmourServices.getTimeStampHash(cid as string, chainName as string);
         } catch (error: any) {
             return response.status(INTERNAL_SERVER_ERROR).send({ message: `An Error Ocurred: \n${error.message}` })
         }

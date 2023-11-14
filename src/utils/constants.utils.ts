@@ -29,3 +29,6 @@ export const TWO = 2;
 export const ZERO = 0;
 export const HUNDRED = 100;
 export const BEARER = "bearer";
+
+//Allowed File Extensions
+export const allowedImageExtensions = ["jpg", "png"]

@@ -18,6 +18,7 @@ export interface IConversation {
 }
 export interface IUser {
     userId: string;
+    walletAddress: string;
     conversations: IConversation[];
 }
 

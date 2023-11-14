@@ -1,22 +1,24 @@
 import lighthouse from '@lighthouse-web3/sdk';
 import { signAuthMessage } from './signAuthMessage';
-import { PUBLIC_KEY } from '../../config/env.config';
+import { MAINNET_WHITELIST_CONTRACT_ADDRESS, PUBLIC_KEY, TESTNET_WHITELIST_CONTRACT_ADDRESS, WEB3_ENVIRONMENT } from '../../config/env.config';
+import { TWO } from '../../utils/constants.utils';
+import { Address } from 'viem';
 
-
-export const applyAccessControl = async (cid: string) => {
+export const applyAccessControl = async (cid: string, userAddress: Address) => {
     try {
         //NB: Our current verfication contract is deployed on FVM main-net which is currently of part of the access control allowed chain         
         const conditions = [
             {
-                id: 1,
-                chain: "FVM",
+                id: TWO,
+                chain: "Calibration",
                 method: "verifyUser",
                 standardContractType: "Custom",
-                contractAddress: "0x6A0a62FE073AC284fc5A65adD1EfC49C5Cb92eCf",
+                contractAddress: WEB3_ENVIRONMENT === "Testnet" ? TESTNET_WHITELIST_CONTRACT_ADDRESS : MAINNET_WHITELIST_CONTRACT_ADDRESS,
                 returnValueTest: {
                     comparator: "==",
                     value: true
-                }
+                },
+                parameters: [userAddress],
             },
         ];
 

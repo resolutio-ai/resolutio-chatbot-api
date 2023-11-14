@@ -3,7 +3,7 @@ import cors from "cors"
 import { connectDatabase } from "./config/database.config";
 import { apiRoutes } from "./routes";
 import { corsOptions } from "./utils/constants.utils";
-import { getApiKey } from "./controller/lighthouse/apikey";
+import { getApiKey } from "./integrations/lighthouse/apikey";
 import { PORT } from "./config/env.config";
 
 const app = express();

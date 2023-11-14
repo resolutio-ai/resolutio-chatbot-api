@@ -1,0 +1,56 @@
+import { Request, Response } from "express";
+import { BAD_REQUEST, INTERNAL_SERVER_ERROR, OK, ONE } from "../utils/constants.utils";
+import { storeFiles } from "../integrations/web3storage";
+import creatorarmourServices from "../services/creatorarmor.services";
+import { CreatedWork } from "../models/creatorarmor.schema";
+
+class CreatorArmourController {
+    getCreatedWork = async (request: Request, response: Response) => {
+        const { cid, chainName } = request.query;
+
+        if (!cid || !chainName) {
+            response.status(BAD_REQUEST).send({})
+        }
+
+        let work: CreatedWork | null = null;
+
+        try {
+            work = await creatorarmourServices.getFiles(cid as string);
+        } catch (error: any) {
+            return response.status(INTERNAL_SERVER_ERROR).
+                send({
+                    message: `An Error Ocurred: \n${error.message}`
+                });
+        }
+
+        return response.status(OK).send({ message: "Success", data: work });
+    }
+
+    createTimeStamp = async (request: Request, response: Response) => {
+        const { files, chainName } = request.body;
+
+        if (!files || files.length < ONE || !chainName) {
+            return response.status(BAD_REQUEST).send({ message: "Invalid Parameters Sent" });
+        }
+
+        let cid;
+        let hash;
+
+        try {
+            cid = await storeFiles(files);
+
+            hash = await creatorarmourServices.getTimeStampHash(cid as string, chainName);
+        } catch (error: any) {
+            return response.status(INTERNAL_SERVER_ERROR).send({ message: `An Error Ocurred: \n${error.message}` })
+        }
+
+        return response.status(OK).send(
+            {
+                message: "Success",
+                Data: { transactionHash: hash }
+            }
+        );
+    }
+}
+
+export default new CreatorArmourController();

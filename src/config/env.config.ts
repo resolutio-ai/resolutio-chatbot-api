@@ -14,6 +14,10 @@ export const GET_APIKEY_ENDPOINT = validateEnvVariable('GET_APIKEY_ENDPOINT');
 export const SIGNED_MESSAGE = validateEnvVariable('SIGNED_MESSAGE');
 export const GATEWAY_BASEURL = validateEnvVariable('GATEWAY_BASEURL');
 export const CHATBOT_BASEURL = validateEnvVariable('CHATBOT_BASEURL');
+export const WEB3_ENVIRONMENT = validateEnvVariable('WEB3_ENVIRONMENT');
+export const MAINNET_WHITELIST_CONTRACT_ADDRESS = validateEnvVariable('MAINNET_WHITELIST_CONTRACT_ADDRESS');
+export const TESTNET_WHITELIST_CONTRACT_ADDRESS = validateEnvVariable('TESTNET_WHITELIST_CONTRACT_ADDRESS');
+export const MAGIC_SECRET = validateEnvVariable('MAGIC_SECRET_KEY');
 
 // Helper function to validate environment variables
 function validateEnvVariable(variableName: string) {

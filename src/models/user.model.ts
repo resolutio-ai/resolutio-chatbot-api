@@ -4,6 +4,12 @@ import { ContentType, Roles, Status } from '../utils/constants.utils';
 
 export const userSchema = new Schema<IUser>({
     userId: { type: String, required: true },
+    walletAddress: {
+        type: String,
+        trim: true,
+        required: true,
+        unique: true
+    },
     conversations: {
         type: [{
             _id: { type: String },

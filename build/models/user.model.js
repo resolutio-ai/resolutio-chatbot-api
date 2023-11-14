@@ -5,6 +5,12 @@ const mongoose_1 = require("mongoose");
 const constants_utils_1 = require("../utils/constants.utils");
 exports.userSchema = new mongoose_1.Schema({
     userId: { type: String, required: true },
+    walletAddress: {
+        type: String,
+        trim: true,
+        required: true,
+        unique: true
+    },
     conversations: {
         type: [{
                 _id: { type: String },

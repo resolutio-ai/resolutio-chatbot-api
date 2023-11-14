@@ -35,14 +35,19 @@ class CreatorArmourController {
             return response.status(constants_utils_1.OK).send({ message: "Success", data: work });
         });
         this.createTimeStamp = (request, response) => __awaiter(this, void 0, void 0, function* () {
-            const { files, chainName } = request.body;
+            const files = request.files;
+            const { chainName } = request.query;
             if (!files || files.length < constants_utils_1.ONE || !chainName) {
                 return response.status(constants_utils_1.BAD_REQUEST).send({ message: "Invalid Parameters Sent" });
             }
             let cid;
             let hash;
             try {
-                cid = yield (0, web3storage_1.storeFiles)(files);
+                const filesArray = files.map(multerFile => {
+                    const { originalname, mimetype, buffer } = multerFile;
+                    return new File([buffer], originalname, { type: mimetype });
+                });
+                cid = yield (0, web3storage_1.storeFiles)(filesArray);
                 hash = yield creatorarmor_services_1.default.getTimeStampHash(cid, chainName);
             }
             catch (error) {

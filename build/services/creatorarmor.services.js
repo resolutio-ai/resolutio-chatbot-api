@@ -19,7 +19,7 @@ const ethers_1 = require("ethers");
 const network_utils_1 = require("../utils/network.utils");
 class CreateArmourService {
     constructor() {
-        this.getFiles = (cid, chainname) => __awaiter(this, void 0, void 0, function* () {
+        this.getFiles = (cid) => __awaiter(this, void 0, void 0, function* () {
             const files = yield (0, web3storage_1.retrieveFiles)(cid);
             if (files.length === 0) {
                 throw new Error("No files found.");

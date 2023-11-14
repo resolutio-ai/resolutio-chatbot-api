@@ -2,6 +2,12 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getSafeServiceUrl = exports.getTransactionExplorerUrl = exports.getNetworkConfig = exports.getAddressExplorerUrl = void 0;
 const networkConfig = {
+    FVMTestNet: {
+        rpcUrl: "https://rpc.ankr.com/filecoin_testnet",
+        chainId: 314159,
+        explorerUrl: "https://beryx.zondax.ch/",
+        contractAddress: ""
+    },
     polygonTestnet: {
         rpcUrl: "https://rpc.ankr.com/polygon_mumbai",
         chainId: 80001,

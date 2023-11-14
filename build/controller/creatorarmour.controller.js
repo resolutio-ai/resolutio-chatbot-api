@@ -24,7 +24,7 @@ class CreatorArmourController {
             }
             let work = null;
             try {
-                work = yield creatorarmor_services_1.default.getFiles(cid, chainName);
+                work = yield creatorarmor_services_1.default.getFiles(cid);
             }
             catch (error) {
                 return response.status(constants_utils_1.INTERNAL_SERVER_ERROR).

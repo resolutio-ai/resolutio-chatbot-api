@@ -3,11 +3,6 @@ import { User } from "../models/user.model";
 import authService from "../services/auth.service";
 import { BAD_REQUEST, OK, UNAUTHORIZED } from "../utils/constants.utils";
 
-interface AuthenticatedUser {
-    email: string;
-    walletAddress: string;
-}
-
 class AuthController {
     async authenticate(request: Request, response: Response) {
         const { DIDToken } = request.body;

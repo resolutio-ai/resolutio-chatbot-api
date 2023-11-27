@@ -13,27 +13,29 @@ class AuthController {
 
         try {
             const { email, publicAddress } = await authService.validateDIDToken(DIDToken);
+
+            //TODO: Move to User Service
+            let user = await User.findById(email);
+
+            if (!user) {
+                user = await User.create({
+                    _id: email,
+                    walletAddress: publicAddress
+                });
+            }
+
+            return response.status(OK).send({
+                message: "success",
+                data: {
+                    email: email,
+                    walletAddress: publicAddress,
+                }
+            });
+            
         } catch (error: any) {
             return response.status(BAD_REQUEST).send({ message: `${error.message}` })
         }
-        const { email, publicAddress } = await authService.validateDIDToken(DIDToken);
 
-        let user = await User.findById(email);
-
-        if (!user) {
-            user = await User.create({
-                _id: email,
-                walletAddress: publicAddress
-            });
-        }
-
-        return response.status(OK).send({
-            message: "success",
-            data: {
-                email: email,
-                walletAddress: publicAddress,
-            }
-        });
     }
 
 }

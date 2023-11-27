@@ -12,7 +12,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ConversationController = void 0;
 const user_model_1 = require("../models/user.model");
 const constants_utils_1 = require("../utils/constants.utils");
 const upload_1 = require("../integrations/lighthouse/upload");
@@ -149,4 +148,4 @@ class ConversationController {
         });
     }
 }
-exports.ConversationController = ConversationController;
+exports.default = new ConversationController();

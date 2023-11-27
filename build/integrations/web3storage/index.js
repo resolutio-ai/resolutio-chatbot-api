@@ -11,11 +11,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.storeFiles = exports.retrieveFiles = void 0;
 const web3_storage_1 = require("web3.storage");
-function getAccessToken() {
-    return process.env.WEB3STORAGE_TOKEN;
-}
+const env_config_1 = require("../../config/env.config");
 function makeStorageClient() {
-    return new web3_storage_1.Web3Storage({ token: getAccessToken() });
+    return new web3_storage_1.Web3Storage({ token: env_config_1.WEB3STORAGE_TOKEN });
 }
 function retrieveFiles(cid) {
     return __awaiter(this, void 0, void 0, function* () {

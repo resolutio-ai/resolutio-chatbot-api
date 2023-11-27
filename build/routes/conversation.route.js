@@ -1,8 +1,10 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const conversation_controller_1 = require("../controller/conversation.controller");
-const conversationController = new conversation_controller_1.ConversationController();
-module.exports = (0, express_1.Router)()
-    .get("/", conversationController.getPreviousConversations)
-    .post("/", conversationController.sendUserMessage);
+const conversation_controller_1 = __importDefault(require("../controller/conversation.controller"));
+exports.default = (0, express_1.Router)()
+    .get("/", conversation_controller_1.default.getPreviousConversations)
+    .post("/", conversation_controller_1.default.sendUserMessage);

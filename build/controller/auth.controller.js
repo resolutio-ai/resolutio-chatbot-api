@@ -24,25 +24,25 @@ class AuthController {
             }
             try {
                 const { email, publicAddress } = yield auth_service_1.default.validateDIDToken(DIDToken);
+                //TODO: Move to User Service
+                let user = yield user_model_1.User.findById(email);
+                if (!user) {
+                    user = yield user_model_1.User.create({
+                        _id: email,
+                        walletAddress: publicAddress
+                    });
+                }
+                return response.status(constants_utils_1.OK).send({
+                    message: "success",
+                    data: {
+                        email: email,
+                        walletAddress: publicAddress,
+                    }
+                });
             }
             catch (error) {
                 return response.status(constants_utils_1.BAD_REQUEST).send({ message: `${error.message}` });
             }
-            const { email, publicAddress } = yield auth_service_1.default.validateDIDToken(DIDToken);
-            let user = yield user_model_1.User.findById(email);
-            if (!user) {
-                user = yield user_model_1.User.create({
-                    _id: email,
-                    walletAddress: publicAddress
-                });
-            }
-            return response.status(constants_utils_1.OK).send({
-                message: "success",
-                data: {
-                    email: email,
-                    walletAddress: publicAddress,
-                }
-            });
         });
     }
 }

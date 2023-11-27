@@ -25,7 +25,7 @@ app.use(body_parser_1.default.urlencoded({
 }));
 app.use((0, cors_1.default)(constants_utils_1.corsOptions));
 app.get("/", (_, res) => __awaiter(void 0, void 0, void 0, function* () {
-    res.status(200).send("Welcome to Resolutio Chatbot :)");
+    res.status(200).send("Welcome to Resolutio API :)");
 }));
 app.use("/api", routes_1.apiRoutes);
 app.all("*", (_, res) => res.status(404).send({ message: "route not found" }));

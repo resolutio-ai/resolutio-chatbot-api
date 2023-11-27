@@ -1,13 +1,18 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.sendChatRequestSchema = void 0;
-const yup_1 = __importDefault(require("yup"));
-exports.sendChatRequestSchema = yup_1.default.object().shape({
-    userId: yup_1.default.string(),
-    messageContent: yup_1.default.string().required("Users message is required"),
-    timeStamp: yup_1.default.string().required("timeStamp is required"),
-    isLoggedIn: yup_1.default.bool().required("User's log in status is required")
+exports.uploadArtWorkSchema = exports.sendChatRequestSchema = void 0;
+const yup_1 = require("yup");
+exports.sendChatRequestSchema = (0, yup_1.object)().shape({
+    userId: (0, yup_1.string)(),
+    messageContent: (0, yup_1.string)().required("Users message is required"),
+    timeStamp: (0, yup_1.string)().required("timeStamp is required"),
+    isLoggedIn: (0, yup_1.bool)().required("User's log in status is required")
+});
+exports.uploadArtWorkSchema = (0, yup_1.object)({
+    creatorName: (0, yup_1.string)().required(""),
+    workName: (0, yup_1.string)().required(),
+    dateOfCreation: (0, yup_1.date)().required(""),
+    specificMedium: (0, yup_1.string)(),
+    medium: (0, yup_1.string)().required(),
+    contactFile: (0, yup_1.string)().required()
 });

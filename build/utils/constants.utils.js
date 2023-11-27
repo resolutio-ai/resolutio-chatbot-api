@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.allowedImageExtensions = exports.BEARER = exports.HUNDRED = exports.ZERO = exports.TWO = exports.MINUSONE = exports.ONE = exports.TEMPORARY_REDIRECT = exports.PERMANENT_REDIRECT = exports.SERVICE_UNAVAILABLE = exports.INTERNAL_SERVER_ERROR = exports.UNAUTHORIZED = exports.NOT_FOUND = exports.CREATED = exports.OK = exports.BAD_REQUEST = exports.Status = exports.ContentType = exports.Roles = exports.corsOptions = void 0;
+exports.DEFAULT_CHAIN = exports.allowedImageExtensions = exports.BEARER = exports.HUNDRED = exports.ZERO = exports.TWO = exports.MINUSONE = exports.ONE = exports.TEMPORARY_REDIRECT = exports.PERMANENT_REDIRECT = exports.SERVICE_UNAVAILABLE = exports.INTERNAL_SERVER_ERROR = exports.UNAUTHORIZED = exports.NOT_FOUND = exports.CREATED = exports.OK = exports.BAD_REQUEST = exports.Status = exports.ContentType = exports.Roles = exports.corsOptions = void 0;
 const allowedOrigins = ['http://localhost:3000', "https://resolutio.ai"];
 exports.corsOptions = {
     //origin: allowedOrigins
@@ -43,3 +43,4 @@ exports.HUNDRED = 100;
 exports.BEARER = "bearer";
 //Allowed File Extensions
 exports.allowedImageExtensions = ["jpg", "png"];
+exports.DEFAULT_CHAIN = "FVMTestNet";

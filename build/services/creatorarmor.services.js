@@ -60,3 +60,9 @@ class CreateArmourService {
     }
 }
 exports.default = new CreateArmourService();
+//Way Forward
+//Deploy Contract
+//Send a file and DData to create a CID
+//How to upload more than one file from the same endpoint
+//if I have a html form that has multiple file upload fields
+//how does HTML differentiate them when sending to  a backend

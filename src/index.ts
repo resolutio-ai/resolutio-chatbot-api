@@ -17,7 +17,7 @@ app.use(
 app.use(cors(corsOptions));
 
 app.get("/", async (_, res) => {
-    res.status(200).send("Welcome to Resolutio Chatbot :)");
+    res.status(200).send("Welcome to Resolutio API :)");
 });
 
 app.use("/api", apiRoutes);

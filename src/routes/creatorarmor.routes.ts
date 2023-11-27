@@ -4,5 +4,5 @@ import { upload } from "../utils/multer.utils";
 import { TWO } from "../utils/constants.utils";
 
 export default Router()
-    .post("/", upload.array("artWork", TWO), creatorarmourController.createTimeStamp)
+    .post("/", upload.array("artWorks", TWO), creatorarmourController.createTimeStamp)
     .get("/", creatorarmourController.getCreatedWork);

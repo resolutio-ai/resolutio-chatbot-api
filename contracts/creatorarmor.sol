@@ -39,5 +39,7 @@ contract CreateArmour is AccessControl {
         works[msg.sender].push(work);
     }
 
-    functio
+    function getTimeStamps(address owner) external view returns(Work[] memory){
+        return works[owner];
+    }
 }

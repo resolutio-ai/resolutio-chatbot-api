@@ -32,3 +32,5 @@ export const BEARER = "bearer";
 
 //Allowed File Extensions
 export const allowedImageExtensions = ["jpg", "png"]
+
+export const DEFAULT_CHAIN = "FVMTestNet";

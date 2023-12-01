@@ -1,4 +1,4 @@
-## resolutio: Protection Layer for Creator Economy
+# resolutio: Protection Layer for Creator Economy
 Welcome to *********resolutio*********’s GitHub repository, where innovation meets protection in the dynamic world of digital creation. *resolutio* is a platform dedicated to empowering creators by providing robust solutions in the fields of blockchain, AI, and intellectual property.
 
 ## Overview

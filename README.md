@@ -1,5 +1,3 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
-
 ## resolutio: Protection Layer for Creator Economy
 Welcome to *********resolutio*********’s GitHub repository, where innovation meets protection in the dynamic world of digital creation. *resolutio* is a platform dedicated to empowering creators by providing robust solutions in the fields of blockchain, AI, and intellectual property.
 

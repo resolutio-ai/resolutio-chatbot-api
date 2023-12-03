@@ -158,10 +158,4 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 
 
 ## TODO
-- Add Yup Validation
-- Implement Zareens API✅
-- A decentralized storage option?✅
-
-
-- deploy Tokens on Necessary Chains
-- Upate FVM Chain Details
+We are building the complete flow from SignUp --> Form --> Feed

@@ -41,7 +41,7 @@ class CreateArmourService {
 
     getTimeStampHash = async (cid: string, chainname: string) => {
 
-        const { chainId, contractAddress } = getNetworkConfig(chainname);
+        const { chainId, contractAddress, rpcUrl } = getNetworkConfig(chainname);
 
         const nftInterface = new ethers.utils.Interface([
             "function createTimeStamp(string cid)",
@@ -53,8 +53,8 @@ class CreateArmourService {
             to: contractAddress,
             data: data
         };
-
-        const partialUserOp = await getPartialUserOp(transaction, chainId);
+        
+        const partialUserOp = await getPartialUserOp(transaction, chainId, rpcUrl);
 
         return await executeUserOp(partialUserOp);
     }

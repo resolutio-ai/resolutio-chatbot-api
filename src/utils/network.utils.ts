@@ -7,34 +7,34 @@ interface NetworkConfig extends indexable {
         rpcUrl: string;
         chainId: number;
         explorerUrl: string;
-        contractAddress: ""
+        contractAddress: string
     };
     scrollTestnet: {
         rpcUrl: string;
         chainId: number;
         explorerUrl: string;
-        contractAddress: ""
+        contractAddress: string
     };
     optimismTestnet: {
         rpcUrl: string;
         chainId: number;
         explorerUrl: string;
-        contractAddress: ""
+        contractAddress: string
     };
 }
 
 const networkConfig: NetworkConfig = {
     FVMTestNet: {
-        rpcUrl: "https://rpc.ankr.com/filecoin_testnet",
+        rpcUrl: "https://api.calibration.node.glif.io/rpc/v1",
         chainId: 314159,
         explorerUrl: "https://beryx.zondax.ch/",
-        contractAddress: ""
+        contractAddress: "0x9b70257eD0c12468174a625e3Fc77747C6CA6479"
     },
     polygonTestnet: {
         rpcUrl: "https://rpc.ankr.com/polygon_mumbai",
         chainId: 80001,
         explorerUrl: "https://mumbai.polygonscan.com",
-        contractAddress: ""
+        contractAddress: "0x35F026c0d0CD338613030A6e0004e6a259D469E2"
     },
     scrollTestnet: {
         rpcUrl: "https://polygon-mainnet.g.alchemy.com/v2/zHEgzvGizW0dHlGJ7J6ZP477wnNlepoF",

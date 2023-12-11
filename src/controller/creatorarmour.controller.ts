@@ -28,19 +28,23 @@ class CreatorArmourController {
     }
 
     createTimeStamp = async (request: Request, response: Response) => {
-        const files = request.files as Express.Multer.File[];
-        
-        const artworkDetails = await uploadArtWorkSchema.validate(request.body);
-
-        let { chainName } = request.query;
-
-        chainName ??= DEFAULT_CHAIN;
-
-        if (!files || files.length < ONE || !chainName) {
-            return response.status(BAD_REQUEST).send({ message: "Invalid Parameters Sent" });
-        }
-
         try {
+
+            if(!request.body.metadata){
+                throw new Error("Missing Metadata")
+            }
+
+            const artworkDetails = await uploadArtWorkSchema.validate(JSON.parse(request.body.metadata));
+
+            const files = request.files as Express.Multer.File[];
+
+            let { chainName } = request.query;
+
+            chainName ??= DEFAULT_CHAIN;
+
+            if (!files || files.length < ONE || !chainName) {
+                return response.status(BAD_REQUEST).send({ message: "Invalid Parameters Sent" });
+            }
             const filesArray = files.map(multerFile => {
                 const { originalname, mimetype, buffer } = multerFile;
 
@@ -60,6 +64,10 @@ class CreatorArmourController {
                 }
             );
         } catch (error: any) {
+            if(error.name === "Validation Error"){
+                return response.status(BAD_REQUEST).send({message: "A Validation Error Occured"})
+            }
+
             return response.status(error?.status ?? INTERNAL_SERVER_ERROR).send({ message: `An Error Ocurred: \n${error.message}` })
         }
     }

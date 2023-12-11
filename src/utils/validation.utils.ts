@@ -17,10 +17,10 @@ interface UploadBody {
 }
 
 export const uploadArtWorkSchema: ObjectSchema<UploadBody> = object({
-    creatorName: string().required(""),
-    workName: string().required(),
-    dateOfCreation: date().required(""),
+    creatorName: string().required("Creator Name is Required"),
+    workName: string().required("Name of Work is Required"),
+    dateOfCreation: date().required("Date of Creation is Required"),
     specificMedium: string(),
-    medium: string<"Film" | "Photo" | "Music" | "AI" | "Art" | "Other">().required(),
-    contactFile: string<"CC BY" | "CC BY-SA" | "CC-BY-NC" | "CC-BY-NC-SA" | "CC-BY-ND" | "CC-BY-NC-ND" | "CC0" | "resolutio License" | "Your own License">().required()
+    medium: string<"Film" | "Photo" | "Music" | "AI" | "Art" | "Other">().required("Medium is Required"),
+    contactFile: string<"CC BY" | "CC BY-SA" | "CC-BY-NC" | "CC-BY-NC-SA" | "CC-BY-ND" | "CC-BY-NC-ND" | "CC0" | "resolutio License" | "Your own License">().required("Contact File Is Required")
 });

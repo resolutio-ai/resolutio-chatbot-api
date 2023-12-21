@@ -64,7 +64,7 @@ export async function createAccount(chainId: number, rpcUrl: string) {
         entryPointAddress: DEFAULT_ENTRYPOINT_ADDRESS,
         defaultValidationModule: await getModule(rpcUrl),
         activeValidationModule: await getModule(rpcUrl)
-    })
+    });
 
     address ??= await smartAccount.getAccountAddress();
 

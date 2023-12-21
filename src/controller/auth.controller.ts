@@ -33,7 +33,7 @@ class AuthController {
             });
             
         } catch (error: any) {
-            return response.status(BAD_REQUEST).send({ message: `${error.message}` })
+            return response.status(UNAUTHORIZED).send({ message: `${error.message}` })
         }
 
     }

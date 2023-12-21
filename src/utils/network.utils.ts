@@ -34,7 +34,7 @@ const networkConfig: NetworkConfig = {
         rpcUrl: "https://rpc.ankr.com/polygon_mumbai",
         chainId: 80001,
         explorerUrl: "https://mumbai.polygonscan.com",
-        contractAddress: "0x12BA1150d263E6Ac75aCc57f4e184409106e328c"
+        contractAddress: "0xa7c33f52de3FD76408644A7c87D164cDef4A49DD"
     },
     scrollTestnet: {
         rpcUrl: "https://polygon-mainnet.g.alchemy.com/v2/zHEgzvGizW0dHlGJ7J6ZP477wnNlepoF",

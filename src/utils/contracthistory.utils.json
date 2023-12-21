@@ -1,0 +1,13 @@
+[
+    {
+        "name": "Creator-Armour",
+        "chain": "Polygon TestNet",
+        "versions": [
+            {
+                "date-deployed": "12/21/2023",
+                "contract-address": "0xa7c33f52de3FD76408644A7c87D164cDef4A49DD",
+                "deployer": "0x1a003097504dfB5474ea81194Dd17f133C5a5cBB"
+            }
+        ]
+    }
+]

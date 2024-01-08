@@ -1,21 +1,18 @@
 import { Magic } from "@magic-sdk/admin";
-import { MAGIC_SECRET } from "../../config/env.config";
+import { MAGIC_SECRET_KEY } from "../../config/env.config";
 
 let instance: Magic | undefined = undefined;
 
 export const getMagicAdmin = () => {
-    if (instance) return instance;
+    if (instance) return instance;   
 
-    const magicSecretKey = MAGIC_SECRET;
-    if (magicSecretKey === undefined || magicSecretKey === "")
-        throw new Error("MAGIC_SECRET_KEY");
-
-    instance = new Magic(magicSecretKey);
+    instance = new Magic(MAGIC_SECRET_KEY);
+    
     return instance;
 };
 
 export const getMagicClient = () => {
-    const magicPubKey = process.env.NEXT_PUBLIC_MAGIC_PUBLIC_KEY;
+    const magicPubKey = process.env.MAGIC_PUBLIC_KEY;
     if (magicPubKey === undefined || magicPubKey === "") {
         throw new Error("NEXT_PUBLIC_MAGIC_PUBLIC_KEY");
     }

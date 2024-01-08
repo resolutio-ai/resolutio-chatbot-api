@@ -1,8 +1,9 @@
 import { Request, Response } from "express";
-import { BAD_REQUEST, INTERNAL_SERVER_ERROR, OK, ONE } from "../utils/constants.utils";
+import { BAD_REQUEST, DEFAULT_CHAIN, INTERNAL_SERVER_ERROR, OK, ONE } from "../utils/constants.utils";
 import { storeFiles } from "../integrations/web3storage";
 import creatorarmourServices from "../services/creatorarmor.services";
 import { CreatedWork } from "../models/creatorarmor.schema";
+import { uploadArtWorkSchema } from "../utils/validation.utils";
 
 class CreatorArmourController {
     getCreatedWork = async (request: Request, response: Response) => {
@@ -27,30 +28,50 @@ class CreatorArmourController {
     }
 
     createTimeStamp = async (request: Request, response: Response) => {
-        const { files, chainName } = request.body;
-
-        if (!files || files.length < ONE || !chainName) {
-            return response.status(BAD_REQUEST).send({ message: "Invalid Parameters Sent" });
-        }
-
-        let cid;
-        let hash;
-
         try {
-            cid = await storeFiles(files);
 
-            hash = await creatorarmourServices.getTimeStampHash(cid as string, chainName);
-        } catch (error: any) {
-            return response.status(INTERNAL_SERVER_ERROR).send({ message: `An Error Ocurred: \n${error.message}` })
-        }
-
-        return response.status(OK).send(
-            {
-                message: "Success",
-                Data: { transactionHash: hash }
+            if(!request.body.metadata){
+                throw new Error("Missing Metadata")
             }
-        );
+
+            const artworkDetails = await uploadArtWorkSchema.validate(JSON.parse(request.body.metadata));
+
+            const files = request.files as Express.Multer.File[];
+
+            let { chainName } = request.query;
+
+            chainName ??= DEFAULT_CHAIN;
+
+            if (!files || files.length < ONE || !chainName) {
+                return response.status(BAD_REQUEST).send({ message: "Invalid Parameters Sent" });
+            }
+            const filesArray = files.map(multerFile => {
+                const { originalname, mimetype, buffer } = multerFile;
+
+                return new File([buffer], originalname, { type: mimetype });
+            });
+
+            filesArray.concat(new File([JSON.stringify(artworkDetails)], "artDescription", { type: "text/plain;charset=utf-8", lastModified: Date.now() }))
+
+            const cid = await storeFiles(filesArray);
+
+            const hash = await creatorarmourServices.getTimeStampHash(cid as string, chainName as string);
+
+            return response.status(OK).send(
+                {
+                    message: "Success",
+                    Data: { transactionHash: hash }
+                }
+            );
+        } catch (error: any) {
+            if(error.name === "Validation Error"){
+                return response.status(BAD_REQUEST).send({message: "A Validation Error Occured"})
+            }
+
+            return response.status(error?.status ?? INTERNAL_SERVER_ERROR).send({ message: `An Error Ocurred: \n${error.message}` })
+        }
     }
 }
 
 export default new CreatorArmourController();
+

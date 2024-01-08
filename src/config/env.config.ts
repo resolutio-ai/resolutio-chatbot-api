@@ -17,7 +17,8 @@ export const CHATBOT_BASEURL = validateEnvVariable('CHATBOT_BASEURL');
 export const WEB3_ENVIRONMENT = validateEnvVariable('WEB3_ENVIRONMENT');
 export const MAINNET_WHITELIST_CONTRACT_ADDRESS = validateEnvVariable('MAINNET_WHITELIST_CONTRACT_ADDRESS');
 export const TESTNET_WHITELIST_CONTRACT_ADDRESS = validateEnvVariable('TESTNET_WHITELIST_CONTRACT_ADDRESS');
-export const MAGIC_SECRET = validateEnvVariable('MAGIC_SECRET_KEY');
+export const MAGIC_SECRET_KEY = validateEnvVariable('MAGIC_SECRET_KEY');
+export const WEB3STORAGE_TOKEN = validateEnvVariable('WEB3STORAGE_TOKEN');
 
 // Helper function to validate environment variables
 function validateEnvVariable(variableName: string) {

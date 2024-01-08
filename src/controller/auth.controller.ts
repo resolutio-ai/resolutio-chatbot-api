@@ -3,11 +3,6 @@ import { User } from "../models/user.model";
 import authService from "../services/auth.service";
 import { BAD_REQUEST, OK, UNAUTHORIZED } from "../utils/constants.utils";
 
-interface AuthenticatedUser {
-    email: string;
-    walletAddress: string;
-}
-
 class AuthController {
     async authenticate(request: Request, response: Response) {
         const { DIDToken } = request.body;
@@ -18,27 +13,29 @@ class AuthController {
 
         try {
             const { email, publicAddress } = await authService.validateDIDToken(DIDToken);
-        } catch (error: any) {
-            return response.status(BAD_REQUEST).send({ message: `${error.message}` })
-        }
-        const { email, publicAddress } = await authService.validateDIDToken(DIDToken);
 
-        let user = await User.findById(email);
+            //TODO: Move to User Service
+            let user = await User.findById(email);
 
-        if (!user) {
-            user = await User.create({
-                _id: email,
-                walletAddress: publicAddress
-            });
-        }
-
-        return response.status(OK).send({
-            message: "success",
-            data: {
-                email: email,
-                walletAddress: publicAddress,
+            if (!user) {
+                user = await User.create({
+                    _id: email,
+                    walletAddress: publicAddress
+                });
             }
-        });
+
+            return response.status(OK).send({
+                message: "success",
+                data: {
+                    email: email,
+                    walletAddress: publicAddress,
+                }
+            });
+            
+        } catch (error: any) {
+            return response.status(UNAUTHORIZED).send({ message: `${error.message}` })
+        }
+
     }
 
 }

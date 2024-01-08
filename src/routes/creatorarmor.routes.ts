@@ -1,10 +1,8 @@
-import express from "express";
+import { Router } from "express";
 import creatorarmourController from "../controller/creatorarmour.controller";
+import { upload } from "../utils/multer.utils";
+import { TWO } from "../utils/constants.utils";
 
-const creatorArmorRouter = express.Router();
-
-creatorArmorRouter
-    .post("/", creatorarmourController.createTimeStamp)
-    .get("/", creatorarmourController.getCreatedWork)
-
-export default creatorArmorRouter;
+export default Router()
+    .post("/", upload.array("artWorks", TWO), creatorarmourController.createTimeStamp)
+    .get("/", creatorarmourController.getCreatedWork);

@@ -9,7 +9,7 @@ import { decrypt } from "../integrations/lighthouse/decrypt";
 import { applyAccessControl } from "../integrations/lighthouse/accesscontrol";
 import { Address } from "viem";
 
-export class ConversationController {
+class ConversationController {
     async sendUserMessage(request: Request, response: Response) {
         try {
             const { userId, messageContent, conversationId, timeStamp, isLoggedIn } = request.body;
@@ -157,3 +157,5 @@ export class ConversationController {
         }
     }
 }
+
+export default new ConversationController();

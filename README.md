@@ -157,5 +157,15 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 
 
 
+### Creator-Armour Contract Address
+0x9b70257eD0c12468174a625e3Fc77747C6CA6479
+
 ## TODO
 We are building the complete flow from SignUp --> Form --> Feed
+
+## FLOW
+- Deploy Contract
+- Send a file and Data to create a CID
+- How to upload more than one file from the same endpoint
+- If I have a html form that has multiple file upload fields
+- How does HTML differentiate them when sending to  a backend

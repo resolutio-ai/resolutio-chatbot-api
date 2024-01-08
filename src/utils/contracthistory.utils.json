@@ -1,0 +1,20 @@
+[
+    {
+        "name": "Creator-Armour",
+        "chain": "Polygon TestNet",
+        "versions": [
+            {
+                "date-deployed": "",
+                "contract-address": "0x12BA1150d263E6Ac75aCc57f4e184409106e328c",
+                "deployer": "0x1a003097504dfB5474ea81194Dd17f133C5a5cBB",
+                "change-summary": "initial contract"
+            },
+            {
+                "date-deployed": "12/21/2023",
+                "contract-address": "0xa7c33f52de3FD76408644A7c87D164cDef4A49DD",
+                "deployer": "0x1a003097504dfB5474ea81194Dd17f133C5a5cBB",
+                "change-summary": "Added work Id to Work Struct"
+            }
+        ]
+    }
+]

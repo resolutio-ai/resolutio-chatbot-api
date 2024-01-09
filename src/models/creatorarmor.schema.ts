@@ -17,14 +17,13 @@ export interface ICreatedWork extends CreatedWorkType {
 }
 
 const createdWorkSchema = new Schema<ICreatedWork>({
-    image: { type: String, required: true },
     creatorId: { type: String, required: true },
     nameOfWork: { type: String, required: true },
     medium: { type: String, required: true },
     altMedium: { type: String, required: true },
     timeStamp: { type: String, required: true },
-    license: { type: String, required: true },
+    licenseType: { type: String, required: true },
     cid: { type: String, required: true },
-});
+}, { timestamps: true });
 
 export const CreatedWork = model<ICreatedWork>("CreatedWork", createdWorkSchema);

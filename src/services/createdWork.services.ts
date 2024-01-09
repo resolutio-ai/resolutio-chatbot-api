@@ -4,10 +4,9 @@ import { CreatedWork, ICreatedWork } from "../models/creatorarmor.schema";
 import { executeUserOp, getPartialUserOp } from "../integrations/biconomy";
 import { ethers } from "ethers";
 import { getNetworkConfig } from "../utils/network.utils";
-import { Address } from "viem";
-import { uploadArtWorkSchema } from "../utils/validation.utils";
 import { HttpException } from "../utils/exceptions.utils";
-import { BAD_REQUEST } from "../utils/constants.utils";
+import { BAD_REQUEST, ONE, ZERO } from "../utils/constants.utils";
+import { IUploadBody } from "../models/interfaces.models";
 
 class CreatedWorkService {
 
@@ -43,50 +42,64 @@ class CreatedWorkService {
         return creatorDetails;
     };
 
-    createWork = async (createWorkRequest: ICreatedWork) => {
+    createWork = async (createWorkRequest: IUploadBody, cid: string) => {
         await CreatedWork.create({
-            cid: createWorkRequest.cid,
+            cid,
             nameOfWork: createWorkRequest.nameOfWork,
-            license: createWorkRequest.license,
-            altMedium: createWorkRequest.altMedium,
+            licenseType: createWorkRequest.licenseType,
+            altMedium: createWorkRequest.alternativeMedium,
             medium: createWorkRequest.medium,
-            timeStamp: createWorkRequest.timeStamp,
-            creatorId: createWorkRequest.creatorId,
-            image: createWorkRequest.image
+            timeStamp: createWorkRequest.dateOfCreation,
+            creatorId: createWorkRequest.creatorId
         });
     }
 
     getWorkByCID = async (cid: string) =>
-        await CreatedWork.find({ cid });
+        await CreatedWork.findOne({ cid });
 
-    createTimestamp = async (files: Express.Multer.File[], metadata: ICreatedWork, chainName: string) => {
+    createTimestamp = async (files: Express.Multer.File[], metadata: IUploadBody, chainName: string) => {
+        //Todo: Retrieve creator from the backend
+
         const cid = await this.getCidHashFromFile(files, metadata);
 
-        if(await this.getWorkByCID(cid.toLowerCase())){
-            throw new HttpException(BAD_REQUEST, "A work with matching CID exists");
-        }
+        // if(await this.getWorkByCID(cid.toLowerCase())){
+        //     console.log(await this.getWorkByCID(cid.toLowerCase()), "SUPPOSED WORK")
+        //     throw new HttpException(BAD_REQUEST, "A work with matching CID exists");
+        // }
 
-        this.createWork({...metadata, });
+        this.createWork(metadata, cid);
 
         return await this.getTimeStampHash(cid as string, chainName as string);
     }
 
-    private getCidHashFromFile = async (files: Express.Multer.File[], metadata: any): Promise<string> => {
-        const artworkDetails = await uploadArtWorkSchema.validate(JSON.parse(metadata));
+    private getCidHashFromFile = async (files: Express.Multer.File[], metadata: IUploadBody): Promise<string> => {
 
-        const filesArray = files.map(multerFile => {
-            const { originalname, mimetype, buffer } = multerFile;
+        const inputFilesArray = Object.entries(files);
 
-            return new File([buffer], originalname, { type: mimetype });
-        });
+        const userWork = inputFilesArray.find(x => x[ZERO] == "artWorks")?.[ONE]!;
 
-        filesArray.concat(new File([JSON.stringify(artworkDetails)], "artDescription", { type: "text/plain;charset=utf-8", lastModified: Date.now() }))
+        if (!userWork) {
+            throw new HttpException(BAD_REQUEST, "Please send user's work");
+        }
 
-        return await storeFiles(filesArray);
+        let { originalname, mimetype, buffer } = userWork;
+
+        let fileArray: File[] = [new File([buffer], originalname, { type: mimetype })];
+
+        const userPersonalizedLicense = inputFilesArray.find(x => x[ZERO] == "userPersonalizedLicense")?.[ONE];
+
+        if (userPersonalizedLicense) {
+            let { originalname, mimetype, buffer } = userPersonalizedLicense;
+
+            fileArray.push(new File([buffer], originalname, { type: mimetype }));
+        }
+
+        fileArray.concat(new File([JSON.stringify(metadata)], "artDescription", { type: "text/plain;charset=utf-8", lastModified: Date.now() }))
+
+        return await storeFiles(fileArray);
     }
 
     private getTimeStampHash = async (cid: string, chainname: string) => {
-
         const { chainId, contractAddress, rpcUrl } = getNetworkConfig(chainname);
 
         const nftInterface = new ethers.utils.Interface([

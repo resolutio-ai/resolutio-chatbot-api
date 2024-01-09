@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import { User } from "../models/user.model";
 import authService from "../services/auth.service";
-import { BAD_REQUEST, OK, UNAUTHORIZED } from "../utils/constants.utils";
+import { OK, UNAUTHORIZED } from "../utils/constants.utils";
+import userService from "../services/user.service";
 
 class AuthController {
     async authenticate(request: Request, response: Response) {
@@ -14,14 +14,8 @@ class AuthController {
         try {
             const { email, publicAddress } = await authService.validateDIDToken(DIDToken);
 
-            //TODO: Move to User Service
-            let user = await User.findById(email);
-
-            if (!user) {
-                user = await User.create({
-                    _id: email,
-                    walletAddress: publicAddress
-                });
+            if (!await userService.getUserByEmail(email)) {
+                userService.addUser({ email, publicAddress });
             }
 
             return response.status(OK).send({
@@ -31,13 +25,11 @@ class AuthController {
                     walletAddress: publicAddress,
                 }
             });
-            
+
         } catch (error: any) {
             return response.status(UNAUTHORIZED).send({ message: `${error.message}` })
         }
-
     }
-
 }
 
 export default new AuthController();

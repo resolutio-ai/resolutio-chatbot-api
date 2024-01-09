@@ -4,10 +4,11 @@ import { apiRoutes } from "./routes";
 import { corsOptions } from "./utils/constants.utils";
 import { PORT } from "./config/env.config";
 import bodyParser from "body-parser";
+import { connectDatabase } from "./config/database.config";
 
 const app = express();
 
-//connectDatabase();
+connectDatabase();
 
 app.use(bodyParser.json())
 app.use(

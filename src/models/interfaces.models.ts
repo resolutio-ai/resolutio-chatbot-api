@@ -33,3 +33,12 @@ export interface IChatRequest {
     isLoggedIn: boolean,
     authorRole: Roles
 }
+
+export interface IUploadBody {
+    creatorId: string,
+    nameOfWork: string,
+    dateOfCreation: Date,
+    medium: "Film" | "Photo" | "Music" | "AI" | "Art" | "Other",
+    alternativeMedium?: string,
+    licenseType: "CC BY" | "CC BY-SA" | "CC-BY-NC" | "CC-BY-NC-SA" | "CC-BY-ND" | "CC-BY-NC-ND" | "CC0" | "resolutio License" | "Your own License"
+}

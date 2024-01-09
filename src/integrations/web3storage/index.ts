@@ -20,6 +20,5 @@ export async function retrieveFiles(cid: string) {
 export const storeFiles = async (files: File[]) => {
     const client = makeStorageClient();
     const cid = await client.put(files);
-    console.log("stored files with cid:", cid);
     return cid;
 };

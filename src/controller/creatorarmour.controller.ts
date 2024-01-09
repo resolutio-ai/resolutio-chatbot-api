@@ -34,8 +34,10 @@ class CreatorArmourController {
                 throw new Error("Missing Metadata")
             }
 
-            const metadata = await uploadArtWorkSchema.validate(JSON.parse(request.body.metadata));
-            console.log("In here")
+            const metadata = JSON.parse(request.body.metadata);
+
+            const validatedMetadata = await uploadArtWorkSchema.validate(metadata);
+            
             const files = request.files as Express.Multer.File[];
 
             let { chainName } = request.query;
@@ -46,9 +48,7 @@ class CreatorArmourController {
                 return response.status(BAD_REQUEST).send({ message: "Invalid Parameters Sent" });
             }
 
-            const hash ="xcdhfgvdg12232445";
-
-            //const hash = createdWorkServices.createTimestamp(files, metadata, chainName as string);
+            const hash = await createdWorkServices.createTimestamp(files, metadata, chainName as string);
 
             return response.status(OK).send(
                 {

@@ -94,9 +94,10 @@ class CreatedWorkService {
             fileArray.push(new File([buffer], originalname, { type: mimetype }));
         }
 
-        fileArray.concat(new File([JSON.stringify(metadata)], "artDescription", { type: "text/plain;charset=utf-8", lastModified: Date.now() }))
+        fileArray.concat(new File([JSON.stringify(metadata)], "artDescription", { type: "text/plain;charset=utf-8", lastModified: Date.now() }));
 
-        return await storeFiles(fileArray);
+        //return await storeFiles(fileArray);
+        return "1a4823d90bc72d354903a8b4ec71ec9c953393fcc87455e7b6145e3aefb9fdc2";
     }
 
     private getTimeStampHash = async (cid: string, chainname: string) => {

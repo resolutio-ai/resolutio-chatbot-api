@@ -4,5 +4,5 @@ import { upload } from "../utils/multer.utils";
 import { ONE, TWO } from "../utils/constants.utils";
 
 export default Router()
-    .post("/", upload.fields([{name:"artWorks", maxCount: ONE}, {name:"userPersonalizedLicense", maxCount: ONE}]), creatorarmourController.createTimeStamp)
+    .post("/", upload.fields([{name:"userworks", maxCount: ONE}, {name:"userpersonalizedlicense", maxCount: ONE}]), creatorarmourController.createTimeStamp)
     .get("/", creatorarmourController.getCreatedWork);

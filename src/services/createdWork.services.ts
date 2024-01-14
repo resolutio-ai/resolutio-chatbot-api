@@ -76,7 +76,7 @@ class CreatedWorkService {
 
         const inputFilesArray = Object.entries(files);
 
-        const userWork = inputFilesArray.find(x => x[ZERO] == "artWorks")?.[ONE]!;
+        const userWork = inputFilesArray.find(x => x[ZERO] == "userworks")?.[ONE]!;
 
         if (!userWork) {
             throw new HttpException(BAD_REQUEST, "Please send user's work");
@@ -86,7 +86,7 @@ class CreatedWorkService {
 
         let fileArray: File[] = [new File([buffer], originalname, { type: mimetype })];
 
-        const userPersonalizedLicense = inputFilesArray.find(x => x[ZERO] == "userPersonalizedLicense")?.[ONE];
+        const userPersonalizedLicense = inputFilesArray.find(x => x[ZERO] == "userpersonalizedlicense")?.[ONE];
 
         if (userPersonalizedLicense) {
             let { originalname, mimetype, buffer } = userPersonalizedLicense;

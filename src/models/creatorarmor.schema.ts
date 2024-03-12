@@ -20,10 +20,25 @@ const createdWorkSchema = new Schema<ICreatedWork>({
     creatorId: { type: String, required: true },
     nameOfWork: { type: String, required: true },
     medium: { type: String, required: true },
-    altMedium: { type: String, required: true },
+    altMedium: { type: String },
     timeStamp: { type: String, required: true },
     licenseType: { type: String, required: true },
     cid: { type: String, required: true },
+    fileUploadResponse: {
+     type: {
+        hash: String,
+        name: String,
+        size: String
+     },
+     required: true
+    },
+    licenseUploadResponse: {
+        type: {
+            hash: String,
+            name: String,
+            size: String
+        }
+    },
 }, { timestamps: true });
 
 export const CreatedWork = model<ICreatedWork>("CreatedWork", createdWorkSchema);

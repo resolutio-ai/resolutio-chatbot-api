@@ -1,6 +1,6 @@
 
 import { object, date, string, ObjectSchema, bool } from 'yup';
-import { IUploadBody } from '../models/interfaces.models';
+import { ICreatorWorkMetadata } from '../models/interfaces.models';
 
 export const sendChatRequestSchema = object().shape({
     userId: string(),
@@ -9,7 +9,7 @@ export const sendChatRequestSchema = object().shape({
     isLoggedIn: bool().required("User's log in status is required")
 });
 
-export const uploadArtWorkSchema: ObjectSchema<IUploadBody> = object({
+export const uploadArtWorkSchema: ObjectSchema<ICreatorWorkMetadata> = object({
     creatorId: string().required("Creator Name is Required"),
     nameOfWork: string().required("Name of Work is Required"),
     dateOfCreation: date().required("Date of Creation is Required"),

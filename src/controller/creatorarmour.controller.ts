@@ -9,9 +9,9 @@ import { ICreateWorkSchema } from "../models/interfaces.models";
 
 class CreatorArmourController {
     getCreatedWork = async (request: Request, response: Response) => {
-        const { cid, chainName } = request.query;
+        const { cid } = request.query;
 
-        if (!cid || !chainName) {
+        if (!cid) {
             response.status(BAD_REQUEST).send({})
         }
 
@@ -31,6 +31,8 @@ class CreatorArmourController {
 
     createTimeStamp = async (request: Request, response: Response) => {
         try {
+
+            console.log({body: request.body})
 
             //validate request.body 
             const hash = await createdWorkServices.createTimestamp(request.body as ICreateWorkSchema);

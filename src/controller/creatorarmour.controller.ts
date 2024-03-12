@@ -4,6 +4,8 @@ import { storeFiles } from "../integrations/web3storage";
 import { ICreatedWork } from "../models/creatorarmor.schema";
 import { uploadArtWorkSchema } from "../utils/validation.utils";
 import createdWorkServices from "../services/createdWork.services";
+import { ICreateWorkSchema } from "../models/interfaces.models";
+
 
 class CreatorArmourController {
     getCreatedWork = async (request: Request, response: Response) => {
@@ -16,7 +18,7 @@ class CreatorArmourController {
         let work: ICreatedWork | null = null;
 
         try {
-            work = await createdWorkServices.getWorkDetailsByCID(cid as string);
+            work = await createdWorkServices.getWorkByCID(cid as string);
         } catch (error: any) {
             return response.status(INTERNAL_SERVER_ERROR).
                 send({
@@ -30,30 +32,13 @@ class CreatorArmourController {
     createTimeStamp = async (request: Request, response: Response) => {
         try {
 
-            if(!request.body.metadata){
-                throw new Error("Missing Metadata")
-            }
-
-            const metadata = JSON.parse(request.body.metadata);
-
-            const validatedMetadata = await uploadArtWorkSchema.validate(metadata);
-            
-            const files = request.files as Express.Multer.File[];
-
-            let { chainName } = request.query;
-
-            chainName ??= DEFAULT_CHAIN;
-
-            if (!files || files.length < ONE || !chainName) {
-                return response.status(BAD_REQUEST).send({ message: "Invalid Parameters Sent" });
-            }
-
-            const hash = await createdWorkServices.createTimestamp(files, metadata, chainName as string);
+            //validate request.body 
+            const hash = await createdWorkServices.createTimestamp(request.body as ICreateWorkSchema);
 
             return response.status(OK).send(
                 {
                     message: "Success",
-                    Data: { transactionHash: hash }
+                    Data: { transactionHash: hash.cid }
                 }
             );
         } catch (error: any) {

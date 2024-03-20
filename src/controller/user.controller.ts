@@ -52,6 +52,24 @@ class UserController{
             return response.status(INTERNAL_SERVER_ERROR).send({ error: error.message });
         }
     }
+    async updateUser(request: Request, response: Response) {
+        try {
+            //console.log(request)
+            const userId = request.params.id;
+            const userData: IUser = request.body;
+            const user = await userService.updateUserById(userId, userData);
+            if (user){
+                return response.status(OK).send({message: `updated successfully`, user});
+            }
+            else{
+                return response.status(NOT_FOUND).send({
+                    message: `User not found`
+                });
+            }
+        } catch (error: any) {
+            return response.status(INTERNAL_SERVER_ERROR).send({ error: error.message });
+        }
+    }
     
 }
 

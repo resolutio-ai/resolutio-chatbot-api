@@ -1,6 +1,7 @@
 import { User } from "../models/user.model"
 import { IUser } from "../models/interfaces.models"
 import mongoose from "mongoose"
+import { updateLanguageServiceSourceFile } from "typescript";
 
 interface CreateUserSchema {
     email: string,
@@ -40,7 +41,15 @@ class UserService {
 
     getUserByWalletAddress = async (walletAddress: string) =>
         await User.findOne({walletAddress});
+
+    updateUserById = async(userId: string, userData: IUser): Promise<IUser | null> => {
     
+        const updatedUser = await User.findByIdAndUpdate(userId, { $set: userData }, {new: true} );
+        return updatedUser;
+            
+    }
+        
+        
 }
 
 export default new UserService();

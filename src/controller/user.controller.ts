@@ -1,8 +1,9 @@
 import { Request, Response } from "express";
-import { NOT_FOUND, INTERNAL_SERVER_ERROR, OK, CREATED } from "../utils/constants.utils";
+import { NOT_FOUND, INTERNAL_SERVER_ERROR, OK, CREATED ,SocialMediaType, BAD_REQUEST } from "../utils/constants.utils";
 import userService from "../services/user.service";
-import { IUser } from "../models/interfaces.models";
+import { ISocialMediaURLS, IUser } from "../models/interfaces.models";
 import { ICreatorWorkMetadata } from "../models/interfaces.models";
+import { forEachChild } from "typescript";
 
 
 class UserController {
@@ -48,12 +49,23 @@ class UserController {
     addUser = async (request: Request, response: Response) => {
         try {
             const userData: IUser = request.body;
+            if (userData.socialMediaURLs.length > 0){
+                userData.socialMediaURLs.forEach(innerArray => {
+                    innerArray.forEach((socialMediaURL: ISocialMediaURLS) => {
+                        if (!Object.values(SocialMediaType).includes(socialMediaURL.nameOfSocialMedia)) {
+                            
+                            return response.status(BAD_REQUEST).send({ message: "INVALID SOCIAL MEDIA TYPE" });
+                        }
+                });
+            });
+        }
             await userService.addMainUser(userData);
             return response.status(CREATED).send({ message: "User created successfully" });
         } catch (error: any) {
             return response.status(INTERNAL_SERVER_ERROR).send({ error: error.message });
         }
     }
+     
 
     updateUser = async (request: Request, response: Response) => {
         try {

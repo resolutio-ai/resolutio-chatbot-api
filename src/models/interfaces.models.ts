@@ -24,7 +24,7 @@ export interface IUser {
     bio: string;
     profileImg: string;
     professionalTitle: string;
-    socialMediaURLs: ISocialMediaURLS[];
+    socialMediaURLs: ISocialMediaURLS[][];
     works: ICreatorWorkMetadata[][];
 }
 

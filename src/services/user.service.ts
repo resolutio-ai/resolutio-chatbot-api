@@ -51,9 +51,7 @@ class UserService {
 
     getWork = async(userId: string) =>
         await User.findById(userId);
-
-        
-        
+            
 }
 
 export default new UserService();

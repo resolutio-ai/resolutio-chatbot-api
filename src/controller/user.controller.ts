@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import { NOT_FOUND, INTERNAL_SERVER_ERROR, OK, CREATED } from "../utils/constants.utils";
 import userService from "../services/user.service";
 import { IUser } from "../models/interfaces.models";
-
 import { ICreatorWorkMetadata } from "../models/interfaces.models";
 
 
@@ -46,7 +45,7 @@ class UserController {
         }
     };
 
-    async addUser(request: Request, response: Response) {
+    addUser = async (request: Request, response: Response) => {
         try {
             const userData: IUser = request.body;
             await userService.addMainUser(userData);
@@ -55,9 +54,9 @@ class UserController {
             return response.status(INTERNAL_SERVER_ERROR).send({ error: error.message });
         }
     }
-    async updateUser(request: Request, response: Response) {
+
+    updateUser = async (request: Request, response: Response) => {
         try {
-            //console.log(request)
             const userId = request.params.id;
             const userData: IUser = request.body;
             const user = await userService.updateUserById(userId, userData);
@@ -73,6 +72,8 @@ class UserController {
             return response.status(INTERNAL_SERVER_ERROR).send({ error: error.message });
         }
     }
+
+    //get work of a specific user by its id
     getCreatedWork = async (request: Request, response: Response) => {
         const userId = request.params.id;
         const creatorId = request.params.creatorid;
@@ -105,8 +106,6 @@ class UserController {
             });
         }
     };
-
-
 }
 
 export default new UserController();

@@ -3,21 +3,24 @@ import { NOT_FOUND, INTERNAL_SERVER_ERROR, OK, CREATED } from "../utils/constant
 import userService from "../services/user.service";
 import { IUser } from "../models/interfaces.models";
 
-class UserController{
+import { ICreatorWorkMetadata } from "../models/interfaces.models";
+
+
+class UserController {
 
     // get all the users
     getCreatedUser = async (request: Request, response: Response) => {
         try {
             const users = await userService.getUser();
-            if (users){
+            if (users) {
                 return response.status(OK).send(users);
             }
-            else{
+            else {
                 return response.status(NOT_FOUND).send({
                     message: `User not found`
                 });
             }
-        } catch (error : any) {
+        } catch (error: any) {
             return response.status(NOT_FOUND).send({
                 message: `An Error Ocurred: \n${error.message}`
             });
@@ -28,15 +31,15 @@ class UserController{
         const { walletAddress } = request.params;
         try {
             const users = await userService.getUserByWalletAddress(walletAddress as string);
-            if (users){
+            if (users) {
                 return response.status(OK).send(users);
             }
-            else{
+            else {
                 return response.status(NOT_FOUND).send({
                     message: `User not found`
                 });
             }
-        } catch (error : any) {
+        } catch (error: any) {
             return response.status(INTERNAL_SERVER_ERROR).send({
                 message: `An Error Ocurred: \n${error.message}`
             });
@@ -58,10 +61,10 @@ class UserController{
             const userId = request.params.id;
             const userData: IUser = request.body;
             const user = await userService.updateUserById(userId, userData);
-            if (user){
-                return response.status(OK).send({message: `updated successfully`, user});
+            if (user) {
+                return response.status(OK).send({ message: `updated successfully`, user });
             }
-            else{
+            else {
                 return response.status(NOT_FOUND).send({
                     message: `User not found`
                 });
@@ -70,7 +73,40 @@ class UserController{
             return response.status(INTERNAL_SERVER_ERROR).send({ error: error.message });
         }
     }
-    
+    getCreatedWork = async (request: Request, response: Response) => {
+        const userId = request.params.id;
+        const creatorId = request.params.creatorid;
+        try {
+            const user = await userService.getWork(userId);
+
+            if (user) {
+                if (user.works.length > 0) {
+                    user.works.forEach(innerArray => {
+                        innerArray.forEach((work: ICreatorWorkMetadata) => {
+                            if (work.creatorId === creatorId) {
+                                return response.status(OK).send(work);
+                            }
+                        });
+                    });
+                }
+                return response.status(NOT_FOUND).send({
+                    message: `Work not found`
+                });
+            }
+            else {
+                return response.status(NOT_FOUND).send({
+                    message: `User not found`
+                });
+            }
+
+        } catch (error: any) {
+            return response.status(INTERNAL_SERVER_ERROR).send({
+                message: `An Error Ocurred: \n${error.message}`
+            });
+        }
+    };
+
+
 }
 
 export default new UserController();

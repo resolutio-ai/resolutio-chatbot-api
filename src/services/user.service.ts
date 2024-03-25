@@ -48,6 +48,10 @@ class UserService {
         return updatedUser;
             
     }
+
+    getWork = async(userId: string) =>
+        await User.findById(userId);
+
         
         
 }

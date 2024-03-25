@@ -25,7 +25,7 @@ export interface IUser {
     profileImg: string;
     professionalTitle: string;
     socialMediaURLs: ISocialMediaURLS[];
-    works: ICreatorWorkMetadata[];
+    works: ICreatorWorkMetadata[][];
 }
 
 export interface IChatRequest {

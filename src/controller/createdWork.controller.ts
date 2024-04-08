@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { BAD_REQUEST, DEFAULT_CHAIN, INTERNAL_SERVER_ERROR, OK, ONE } from "../utils/constants.utils";
 import { storeFiles } from "../integrations/web3storage";
-import { ICreatedWork } from "../models/creatorarmor.schema";
+import { ICreatedWork } from "../models/createdWork.schema";
 import { uploadArtWorkSchema } from "../utils/validation.utils";
 import createdWorkServices from "../services/createdWork.services";
 import { ICreateWorkSchema } from "../models/interfaces.models";

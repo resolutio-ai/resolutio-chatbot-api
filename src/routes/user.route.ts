@@ -3,8 +3,8 @@ import userController from "../controller/user.controller";
 
 
 export default Router()
-    .get("/",  userController.getCreatedUser)
-    .get("/:walletAddress",  userController.getCreatedUserByWalletAddress)
+    .get("/",  userController.getAllUsers)
+    .get("/:walletAddress",  userController.getUserByWalletAddress)
     .post("/",  userController.addUser)
     .put("/:id",  userController.updateUser)
     .delete("/",  userController.getDelete);

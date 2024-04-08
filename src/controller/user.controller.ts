@@ -9,7 +9,7 @@ import { forEachChild } from "typescript";
 class UserController {
 
     // get all the users
-    getCreatedUser = async (request: Request, response: Response) => {
+    getAllUsers = async (request: Request, response: Response) => {
         try {
             const users = await userService.getUser();
             if (users) {
@@ -27,7 +27,7 @@ class UserController {
         }
     };
 
-    getCreatedUserByWalletAddress = async (request: Request, response: Response) => {
+    getUserByWalletAddress = async (request: Request, response: Response) => {
         const { walletAddress } = request.params;
         try {
             const users = await userService.getUserByWalletAddress(walletAddress as string);

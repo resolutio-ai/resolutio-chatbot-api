@@ -3,20 +3,22 @@ import { IUser } from './interfaces.models';
 import { Medium, LicenseType, SocialMediaType} from '../utils/constants.utils';
 
 export const userSchema = new Schema<IUser>({
-    //userId: { type: String, required: true },
     walletAddress: {
         type: String,
         trim: true,
         required: true,
         unique: true
     },
-    name: {
+    firstName: {
+        type: String,
+        required: true,
+    },
+    lastName: {
         type: String,
         required: true,
     },
     bio: {
         type: String,
-        required: true,
     },
     profileImg: {
         type: String,
@@ -31,18 +33,7 @@ export const userSchema = new Schema<IUser>({
             nameOfSocialMedia: { type: String, enum: SocialMediaType, required: true  },
             URLvalue: { type: String ,required: true},
         }] 
-    }],
-    works: [{ 
-        type:[{
-            creatorId: { type: String ,required: true},
-            nameOfWork: { type: String ,required: true},
-            dateOfCreation: { type: Date ,required: true},
-            medium: {type: String, required: true  },
-            alternativeMedium: { type: String },
-            licenseType: {type: String, required: true  },
-
-        }]
-     }],
+    }]
     
 });
 

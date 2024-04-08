@@ -20,7 +20,8 @@ export interface IUser {
     userId: string;
     walletAddress: string;
     conversations: IConversation[];
-    name: string;
+    firstName: string;
+    lastName: string;
     bio: string;
     profileImg: string;
     professionalTitle: string;

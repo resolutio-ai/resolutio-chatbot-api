@@ -49,16 +49,6 @@ class UserController {
     addUser = async (request: Request, response: Response) => {
         try {
             const userData: IUser = request.body;
-            if (userData.socialMediaURLs.length > 0){
-                userData.socialMediaURLs.forEach(innerArray => {
-                    innerArray.forEach((socialMediaURL: ISocialMediaURLS) => {
-                        if (!Object.values(SocialMediaType).includes(socialMediaURL.nameOfSocialMedia)) {
-                            
-                            return response.status(BAD_REQUEST).send({ message: "INVALID SOCIAL MEDIA TYPE" });
-                        }
-                });
-            });
-        }
             await userService.addMainUser(userData);
             return response.status(CREATED).send({ message: "User created successfully" });
         } catch (error: any) {
@@ -114,6 +104,18 @@ class UserController {
 
         } catch (error: any) {
             return response.status(INTERNAL_SERVER_ERROR).send({
+                message: `An Error Ocurred: \n${error.message}`
+            });
+        }
+    };
+    getDelete = async (request: Request, response: Response) => {
+        try {
+            await userService.delete();
+            return response.status(OK).send({
+                message: `success`
+            });
+        } catch (error: any) {
+            return response.status(NOT_FOUND).send({
                 message: `An Error Ocurred: \n${error.message}`
             });
         }

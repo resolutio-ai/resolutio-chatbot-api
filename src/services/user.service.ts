@@ -19,17 +19,15 @@ class UserService {
     // function to add full profile of user
     addMainUser = async (userData: IUser): Promise<void> =>
        {
-        const _id = new  mongoose.Types.ObjectId(); 
-        const { walletAddress, name, bio,profileImg, professionalTitle, socialMediaURLs, works } = userData;
+        const { walletAddress, firstName, lastName, bio,profileImg, professionalTitle, socialMediaURLs } = userData;
         await User.create({
-            _id: _id,
             walletAddress: walletAddress,
-            name : name,
+            firstName : firstName,
+            lastName : lastName,
             bio : bio,
             profileImg : profileImg,
             professionalTitle : professionalTitle,
-            socialMediaURLs : socialMediaURLs,
-            works: works
+            socialMediaURLs : socialMediaURLs
         });
     }
 
@@ -51,6 +49,9 @@ class UserService {
 
     getWork = async(userId: string) =>
         await User.findById(userId);
+
+    delete = async() =>
+        await User.deleteMany();
             
 }
 

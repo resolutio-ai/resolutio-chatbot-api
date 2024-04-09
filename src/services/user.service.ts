@@ -17,10 +17,10 @@ class UserService {
        });
     
     // function to add full profile of user
-    addMainUser = async (userData: IUser): Promise<void> =>
+    addMainUser = async (userData: IUser) =>
        {
         const { walletAddress, firstName, lastName, bio,profileImg, professionalTitle, socialMediaURLs } = userData;
-        await User.create({
+        const user = await User.create({
             walletAddress: walletAddress,
             firstName : firstName,
             lastName : lastName,
@@ -29,6 +29,7 @@ class UserService {
             professionalTitle : professionalTitle,
             socialMediaURLs : socialMediaURLs
         });
+        return user;
     }
 
     getUserByEmail = async (email: string) =>

@@ -25,7 +25,7 @@ export interface IUser {
     bio: string;
     profileImg: string;
     professionalTitle: string;
-    socialMediaURLs: ISocialMediaURLS[][];
+    socialMediaURLs: ISocialMediaURLS[];
     works: ICreatorWorkMetadata[][];
 }
 
@@ -69,6 +69,6 @@ export interface ICreateWorkSchema {
 }
 
 export interface ISocialMediaURLS {
-    nameOfSocialMedia: SocialMediaType,
+    nameOfSocialMedia: string,
     URLvalue: string,
 }

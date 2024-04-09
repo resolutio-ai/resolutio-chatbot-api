@@ -28,12 +28,11 @@ export const userSchema = new Schema<IUser>({
         type: String,
         required: true,
     },
-    socialMediaURLs:  [
-        { type: [{
+    socialMediaURLs:  
+    [{
             nameOfSocialMedia: { type: String, enum: SocialMediaType, required: true  },
             URLvalue: { type: String ,required: true},
         }] 
-    }]
     
 });
 

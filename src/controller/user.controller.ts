@@ -54,8 +54,19 @@ class UserController {
     addUser = async (request: Request, response: Response) => {
         try {
             const userData: IUser = request.body;
-            await userService.addMainUser(userData);
-            return response.status(CREATED).send({ message: "User created successfully" });
+
+            if (userData.socialMediaURLs && userData.socialMediaURLs.length > 0){
+                let validURL = validateSocialMediaURLs(userData.socialMediaURLs);
+                if (!validURL){
+                    return response.status(BAD_REQUEST).send({ message: "INVALID SOCIAL MEDIA TYPE" });
+                }    
+            }
+            
+            const user = await userService.addMainUser(userData);
+            return response.status(CREATED).send({ 
+                data: user,
+                message: "User created successfully" 
+            });
         } catch (error: any) {
             return response.status(INTERNAL_SERVER_ERROR).send({ error: error.message });
         }
@@ -81,5 +92,49 @@ class UserController {
         }
     }
 }
+
+function validateSocialMediaURLs(socialMediaURLs: ISocialMediaURLS[]): boolean {
+    for (const obj of socialMediaURLs){
+        switch (obj.nameOfSocialMedia) {
+            case SocialMediaType[0]:
+                console.log('here', obj.nameOfSocialMedia);
+                if (!obj.URLvalue.startsWith("https://twitter.com/")){
+                    return false;
+                }
+                break;
+            case SocialMediaType[1]:
+                if (!obj.URLvalue.startsWith("https://www.behance.net/")){
+                    return false;
+                }
+                break;
+            case SocialMediaType[2]:
+                if (!obj.URLvalue.startsWith("https://www.instagram.com/")){
+                    return false;
+                }
+                break;
+        }
+            
+    }
+    return true;
+}
+            /*
+            switch (socialMediaURL.nameOfSocialMedia) {
+                case SocialMediaType.Twitter:
+                    if (!socialMediaURL.URLvalue.startsWith("https://twitter.com/")){
+                        return false;
+                    }
+                    break;
+                case SocialMediaType.Behance:
+                    if (!socialMediaURL.URLvalue.startsWith("https://www.behance.net/")){
+                        return false;
+                    }
+                    break;
+                case SocialMediaType.Instagram:
+                    if (!socialMediaURL.URLvalue.startsWith("https://www.instagram.com/")){
+                        return false;
+                    }
+                    break;
+            }
+            */
 
 export default new UserController();

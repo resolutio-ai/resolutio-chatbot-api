@@ -6,8 +6,7 @@ export default Router()
     .get("/",  userController.getAllUsers)
     .get("/:walletAddress",  userController.getUserByWalletAddress)
     .post("/",  userController.addUser)
-    .put("/:id",  userController.updateUser)
-    .delete("/",  userController.getDelete);
+    .put("/:id",  userController.updateUser);
 
 
 

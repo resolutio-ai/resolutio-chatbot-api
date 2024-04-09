@@ -7,7 +7,7 @@ import createdWorkServices from "../services/createdWork.services";
 import { ICreateWorkSchema } from "../models/interfaces.models";
 
 
-class CreatorArmourController {
+class CreatedWorkController {
     getCreatedWork = async (request: Request, response: Response) => {
         const { cid } = request.query;
 
@@ -29,6 +29,29 @@ class CreatorArmourController {
         return response.status(OK).send({ message: "Success", data: work });
     }
 
+    /*
+    getAllWorksByUser = async (request: Request, response: Response) => {
+        const { _id } = request.params;
+
+        if (!_id) {
+            response.status(BAD_REQUEST).send({})
+        }
+
+        let work: ICreatedWork | null = null;
+
+        try {
+            work = await createdWorkServices.getWorksByUser(_id as string);
+        } catch (error: any) {
+            return response.status(INTERNAL_SERVER_ERROR).
+                send({
+                    message: `An Error Ocurred: \n${error.message}`
+                });
+        }
+
+        return response.status(OK).send({ message: "Success", data: work });
+    }
+
+*/
     createTimeStamp = async (request: Request, response: Response) => {
         try {
 
@@ -53,5 +76,5 @@ class CreatorArmourController {
     }
 }
 
-export default new CreatorArmourController();
+export default new CreatedWorkController();
 

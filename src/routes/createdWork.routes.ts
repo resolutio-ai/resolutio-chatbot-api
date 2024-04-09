@@ -6,3 +6,4 @@ import { ONE, TWO } from "../utils/constants.utils";
 export default Router()
     .post("/", createdWorkController.createTimeStamp)
     .get("/", createdWorkController.getCreatedWork);
+    //.get("/:id", createdWorkController.getAllWorksByUser);

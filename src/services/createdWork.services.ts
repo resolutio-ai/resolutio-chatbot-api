@@ -13,6 +13,9 @@ class CreatedWorkService {
     getWorkByCID = async (cid: string) =>
         await CreatedWork.findOne({ cid });
 
+    getWorksByUser = async (userId: string) =>
+        await CreatedWork.findById(userId);
+
     createTimestamp = async (createWorkRequest: ICreateWorkSchema) => {
         //Todo: Retrieve creator from the backend
         

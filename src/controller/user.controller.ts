@@ -2,9 +2,6 @@ import { Request, Response } from "express";
 import { NOT_FOUND, INTERNAL_SERVER_ERROR, OK, CREATED ,SocialMediaType, BAD_REQUEST } from "../utils/constants.utils";
 import userService from "../services/user.service";
 import { ISocialMediaURLS, IUser } from "../models/interfaces.models";
-import { ICreatorWorkMetadata } from "../models/interfaces.models";
-import { forEachChild } from "typescript";
-
 
 class UserController {
 
@@ -75,9 +72,10 @@ class UserController {
 
     updateUser = async (request: Request, response: Response) => {
         try {
-            const {userId} = request.params;
+            console.log(request.params)
+            const {id} = request.params;
             const userData: IUser = request.body;
-            const user = await userService.updateUserById(userId, userData);
+            const user = await userService.updateUserById(id, userData);
             if (!user) {
                 return response.status(NOT_FOUND).send({
                     message: `User not found`
@@ -97,7 +95,6 @@ function validateSocialMediaURLs(socialMediaURLs: ISocialMediaURLS[]): boolean {
     for (const obj of socialMediaURLs){
         switch (obj.nameOfSocialMedia) {
             case SocialMediaType[0]:
-                console.log('here', obj.nameOfSocialMedia);
                 if (!obj.URLvalue.startsWith("https://twitter.com/")){
                     return false;
                 }
@@ -117,24 +114,5 @@ function validateSocialMediaURLs(socialMediaURLs: ISocialMediaURLS[]): boolean {
     }
     return true;
 }
-            /*
-            switch (socialMediaURL.nameOfSocialMedia) {
-                case SocialMediaType.Twitter:
-                    if (!socialMediaURL.URLvalue.startsWith("https://twitter.com/")){
-                        return false;
-                    }
-                    break;
-                case SocialMediaType.Behance:
-                    if (!socialMediaURL.URLvalue.startsWith("https://www.behance.net/")){
-                        return false;
-                    }
-                    break;
-                case SocialMediaType.Instagram:
-                    if (!socialMediaURL.URLvalue.startsWith("https://www.instagram.com/")){
-                        return false;
-                    }
-                    break;
-            }
-            */
 
 export default new UserController();

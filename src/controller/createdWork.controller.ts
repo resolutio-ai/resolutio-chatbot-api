@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { BAD_REQUEST, DEFAULT_CHAIN, INTERNAL_SERVER_ERROR, OK, ONE } from "../utils/constants.utils";
+import { BAD_REQUEST, DEFAULT_CHAIN, INTERNAL_SERVER_ERROR, NOT_FOUND, OK, ONE } from "../utils/constants.utils";
 import { storeFiles } from "../integrations/web3storage";
 import { ICreatedWork } from "../models/createdWork.schema";
 import { uploadArtWorkSchema } from "../utils/validation.utils";
@@ -12,46 +12,49 @@ class CreatedWorkController {
         const { cid } = request.query;
 
         if (!cid) {
-            response.status(BAD_REQUEST).send({})
+            response.status(BAD_REQUEST).send({ message: "Provide cid"});
         }
 
         let work: ICreatedWork | null = null;
 
         try {
             work = await createdWorkServices.getWorkByCID(cid as string);
+            if(!work){
+                return response.status(NOT_FOUND).send({ message: "No work found with given cid" });
+            }
+            return response.status(OK).send({ message: "Work retrieved successfully", data: work });
         } catch (error: any) {
             return response.status(INTERNAL_SERVER_ERROR).
                 send({
                     message: `An Error Ocurred: \n${error.message}`
                 });
-        }
-
-        return response.status(OK).send({ message: "Success", data: work });
+        }  
     }
 
-    /*
     getAllWorksByUser = async (request: Request, response: Response) => {
-        const { _id } = request.params;
-
-        if (!_id) {
-            response.status(BAD_REQUEST).send({})
+        const { userId } = request.query;
+        console.log(userId);
+        if (!userId) {
+            response.status(BAD_REQUEST).send({ message: "Provide userId"})
         }
 
-        let work: ICreatedWork | null = null;
-
+        let works: ICreatedWork[] | null = null;
+            
         try {
-            work = await createdWorkServices.getWorksByUser(_id as string);
+            works = await createdWorkServices.getWorksByUser(userId as string);
+            if(!works || works.length < 1){
+                return response.status(NOT_FOUND).send({ message: "No work found for given user" });
+            }
+            return response.status(OK).send({ message: "works by user retrieved successfully", data: works });
         } catch (error: any) {
             return response.status(INTERNAL_SERVER_ERROR).
                 send({
                     message: `An Error Ocurred: \n${error.message}`
                 });
         }
-
-        return response.status(OK).send({ message: "Success", data: work });
+       
     }
 
-*/
     createTimeStamp = async (request: Request, response: Response) => {
         try {
 
@@ -62,7 +65,7 @@ class CreatedWorkController {
 
             return response.status(OK).send(
                 {
-                    message: "Success",
+                    message: "Work created successfully",
                     Data: { transactionHash: hash.cid }
                 }
             );
@@ -74,6 +77,8 @@ class CreatedWorkController {
             return response.status(error?.status ?? INTERNAL_SERVER_ERROR).send({ message: `An Error Ocurred: \n${error.message}` })
         }
     }
+
+    
 }
 
 export default new CreatedWorkController();

@@ -14,7 +14,7 @@ class CreatedWorkService {
         await CreatedWork.findOne({ cid });
 
     getWorksByUser = async (userId: string) =>
-        await CreatedWork.findById(userId);
+        await CreatedWork.find({userId});
 
     createTimestamp = async (createWorkRequest: ICreateWorkSchema) => {
         //Todo: Retrieve creator from the backend
@@ -30,13 +30,15 @@ class CreatedWorkService {
             altMedium: createWorkRequest.metadata.alternativeMedium,
             medium: createWorkRequest.metadata.medium,
             timeStamp: createWorkRequest.metadata.dateOfCreation ?? Date.now,
-            userId: createWorkRequest.metadata.creatorId,
+            userId: createWorkRequest.metadata.userId,
             fileUploadResponse: createWorkRequest.fileUploadResponse.data.fileUploadResponse,
             licenseUploadResponse: createWorkRequest.fileUploadResponse.data.licenseUploadResponse
         });
 
         return work;
     }
+    delete = async() =>
+        await CreatedWork.deleteMany();
 } 
 
 export default new CreatedWorkService();

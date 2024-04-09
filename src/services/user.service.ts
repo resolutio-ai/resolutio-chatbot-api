@@ -35,10 +35,10 @@ class UserService {
     getUserByEmail = async (email: string) =>
         await User.findById(email);
     
-    getUser = async () =>
+    getUsers = async () =>
         await User.find({});
 
-    getUserByWalletAddress = async (walletAddress: string) =>
+    getUserByWalletAddr = async (walletAddress: string) =>
         await User.findOne({walletAddress});
 
     updateUserById = async(userId: string, userData: IUser): Promise<IUser | null> => {
@@ -47,12 +47,6 @@ class UserService {
         return updatedUser;
             
     }
-
-    getWork = async(userId: string) =>
-        await User.findById(userId);
-
-    delete = async() =>
-        await User.deleteMany();
             
 }
 

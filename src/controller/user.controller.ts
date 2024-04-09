@@ -7,7 +7,7 @@ class UserController {
 
     getAllUsers = async (request: Request, response: Response) => {
         try {
-            const users = await userService.getUser();
+            const users = await userService.getUsers();
             if (!users || users.length < 1) {
                 return response.status(NOT_FOUND).send({
                     message: `No User found`
@@ -32,7 +32,7 @@ class UserController {
             return response.status(BAD_REQUEST).send({ message: "Provide wallet address in request" });
         }
         try {
-            const user = await userService.getUserByWalletAddress(walletAddress as string);
+            const user = await userService.getUserByWalletAddr(walletAddress as string);
             if (!user) {
                 return response.status(NOT_FOUND).send({
                     message: `User not found`
@@ -55,7 +55,7 @@ class UserController {
             const userData: IUser = request.body;
 
             const walletAddress = userData.walletAddress;
-            const checkUser = await userService.getUserByWalletAddress(walletAddress as string);
+            const checkUser = await userService.getUserByWalletAddr(walletAddress as string);
             if (checkUser){
                 return response.status(BAD_REQUEST).send({ message: "User with given wallet address exists" });
             }
@@ -63,7 +63,7 @@ class UserController {
             if (userData.socialMediaURLs && userData.socialMediaURLs.length > 0) {
                 let validURL = validateSocialMediaURLs(userData.socialMediaURLs);
                 if (!validURL) {
-                    return response.status(BAD_REQUEST).send({ message: "INVALID SOCIAL MEDIA TYPE" });
+                    return response.status(BAD_REQUEST).send({ message: "INVALID SOCIAL MEDIA URL" });
                 }
             }
 
@@ -91,7 +91,7 @@ class UserController {
             if (userData.socialMediaURLs && userData.socialMediaURLs.length > 0) {
                 let validURL = validateSocialMediaURLs(userData.socialMediaURLs);
                 if (!validURL) {
-                    return response.status(BAD_REQUEST).send({ message: "INVALID SOCIAL MEDIA TYPE" });
+                    return response.status(BAD_REQUEST).send({ message: "INVALID SOCIAL MEDIA URL" });
                 }
             }
             const user = await userService.updateUserById(id, userData);

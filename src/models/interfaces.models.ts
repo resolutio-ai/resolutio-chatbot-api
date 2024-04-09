@@ -42,7 +42,7 @@ export interface IChatRequest {
 }
 
 export interface ICreatorWorkMetadata {
-    creatorId: string,
+    userId: string,
     nameOfWork: string,
     dateOfCreation: Date,
     medium: "Film" | "Photo" | "Music" | "AI" | "Art" | "Other",

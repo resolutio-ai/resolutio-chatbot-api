@@ -9,12 +9,4 @@ export default Router()
     .put("/:id",  userController.updateUser);
 
 
-
-
-    //route sample : http://localhost:6283/api/v1.0/user
-
-    // http://localhost:6283/api/v1.0/user/walletaddr
-
-
-
    

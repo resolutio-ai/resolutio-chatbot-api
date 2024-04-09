@@ -72,15 +72,21 @@ class UserController {
 
     updateUser = async (request: Request, response: Response) => {
         try {
-            console.log(request.params)
             const {id} = request.params;
             const userData: IUser = request.body;
+            if (userData.socialMediaURLs && userData.socialMediaURLs.length > 0){
+                let validURL = validateSocialMediaURLs(userData.socialMediaURLs);
+                if (!validURL){
+                    return response.status(BAD_REQUEST).send({ message: "INVALID SOCIAL MEDIA TYPE" });
+                }    
+            }
             const user = await userService.updateUserById(id, userData);
             if (!user) {
                 return response.status(NOT_FOUND).send({
                     message: `User not found`
                 });
             }
+
             return response.status(OK).send({ 
                 data : user,
                 message: `updated successfully`

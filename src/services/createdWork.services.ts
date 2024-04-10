@@ -37,8 +37,6 @@ class CreatedWorkService {
 
         return work;
     }
-    delete = async() =>
-        await CreatedWork.deleteMany();
 } 
 
 export default new CreatedWorkService();

@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose';
 import { IUser } from './interfaces.models';
-import { Medium, LicenseType, SocialMediaType} from '../utils/constants.utils';
+import { SocialMediaType} from '../utils/constants.utils';
 
 export const userSchema = new Schema<IUser>({
     walletAddress: {

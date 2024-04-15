@@ -93,19 +93,30 @@ class UserController {
             if(!id) {
                 return response.status(BAD_REQUEST).send({ message: "Please provide a valid user id in request" });
             }
+            const orgUser = await userService.getUserById(id);
+            if(!orgUser) {
+                return response.status(NOT_FOUND).send({ message: "User not found" });
+            }
             const userData: IUser = request.body;
+            
             if (userData.walletAddress){
                 return response.status(BAD_REQUEST).send({ message: "The wallet address cannot be updated" });
             }
             
             await this.checkSocialMediaURLs(userData,response);
+
+            if (orgUser.socialMediaURLs && orgUser.socialMediaURLs.length > ZERO && 
+                userData.socialMediaURLs && userData.socialMediaURLs.length > ZERO){
+                    for (const obj of orgUser.socialMediaURLs) {
+                        const updationRequired = userData.socialMediaURLs.some(url => url.nameOfSocialMedia === obj.nameOfSocialMedia)
+                        if(!updationRequired){
+                            userData.socialMediaURLs.push(obj);
+                        }
+                    }
+            }
+            
             
             const user = await userService.updateUserById(id, userData);
-            if (!user) {
-                return response.status(NOT_FOUND).send({
-                    message: `User not found`
-                });
-            }
 
             return response.status(OK).send({
                 data: user,

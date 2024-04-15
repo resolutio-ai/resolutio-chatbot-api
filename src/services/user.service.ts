@@ -38,6 +38,9 @@ class UserService {
     getUsers = async () =>
         await User.find({});
 
+    getUserById = async (userId: string) =>
+        await User.findById(userId);
+
     getUserByWalletAddr = async (walletAddress: string) =>
         await User.findOne({walletAddress});
 

@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { BAD_REQUEST, DEFAULT_CHAIN, INTERNAL_SERVER_ERROR, NOT_FOUND, OK, ONE } from "../utils/constants.utils";
+import { BAD_REQUEST, INTERNAL_SERVER_ERROR, NOT_FOUND, OK, ONE } from "../utils/constants.utils";
 import { storeFiles } from "../integrations/web3storage";
 import { ICreatedWork } from "../models/createdWork.schema";
 import { uploadArtWorkSchema } from "../utils/validation.utils";
@@ -12,7 +12,7 @@ class CreatedWorkController {
         const { cid } = request.query;
 
         if (!cid) {
-            response.status(BAD_REQUEST).send({ message: "Provide cid"});
+            response.status(BAD_REQUEST).send({ message: "Please provide a valid CID"});
         }
 
         let work: ICreatedWork | null = null;
@@ -33,7 +33,6 @@ class CreatedWorkController {
 
     getAllWorksByUser = async (request: Request, response: Response) => {
         const { userId } = request.query;
-        console.log(userId);
         if (!userId) {
             response.status(BAD_REQUEST).send({ message: "Provide userId"})
         }
@@ -42,7 +41,7 @@ class CreatedWorkController {
             
         try {
             works = await createdWorkServices.getWorksByUser(userId as string);
-            if(!works || works.length < 1){
+            if(!works || works.length < ONE){
                 return response.status(NOT_FOUND).send({ message: "No work found for given user" });
             }
             return response.status(OK).send({ message: "works by user retrieved successfully", data: works });

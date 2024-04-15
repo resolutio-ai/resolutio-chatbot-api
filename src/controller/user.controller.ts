@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { NOT_FOUND, INTERNAL_SERVER_ERROR, OK, CREATED, SocialMediaType, BAD_REQUEST } from "../utils/constants.utils";
+import { NOT_FOUND, INTERNAL_SERVER_ERROR, OK, CREATED, SocialMediaType, BAD_REQUEST, ONE, ZERO } from "../utils/constants.utils";
 import userService from "../services/user.service";
 import { ISocialMediaURLS, IUser } from "../models/interfaces.models";
 
@@ -8,7 +8,7 @@ class UserController {
     getAllUsers = async (request: Request, response: Response) => {
         try {
             const users = await userService.getUsers();
-            if (!users || users.length < 1) {
+            if (!users || users.length < ONE) {
                 return response.status(NOT_FOUND).send({
                     message: `No User found`
                 });
@@ -57,13 +57,13 @@ class UserController {
             const walletAddress = userData.walletAddress;
             const checkUser = await userService.getUserByWalletAddr(walletAddress as string);
             if (checkUser){
-                return response.status(BAD_REQUEST).send({ message: "User with given wallet address exists" });
+                return response.status(BAD_REQUEST).send({ message: "User with given wallet address exists." });
             }
 
-            if (userData.socialMediaURLs && userData.socialMediaURLs.length > 0) {
+            if (userData.socialMediaURLs && userData.socialMediaURLs.length > ZERO) {
                 let validURL = validateSocialMediaURLs(userData.socialMediaURLs);
                 if (!validURL) {
-                    return response.status(BAD_REQUEST).send({ message: "INVALID SOCIAL MEDIA URL" });
+                    return response.status(BAD_REQUEST).send({ message: "The given social media URL is inavlid" });
                 }
             }
 
@@ -82,16 +82,16 @@ class UserController {
         try {
             const { id } = request.params;
             if(!id) {
-                return response.status(BAD_REQUEST).send({ message: "Provide user id in request" });
+                return response.status(BAD_REQUEST).send({ message: "Please provide a valid user id in request" });
             }
             const userData: IUser = request.body;
             if (userData.walletAddress){
-                return response.status(BAD_REQUEST).send({ message: "wallet address cannot be updated" });
+                return response.status(BAD_REQUEST).send({ message: "The wallet address cannot be updated" });
             }
-            if (userData.socialMediaURLs && userData.socialMediaURLs.length > 0) {
+            if (userData.socialMediaURLs && userData.socialMediaURLs.length > ZERO) {
                 let validURL = validateSocialMediaURLs(userData.socialMediaURLs);
                 if (!validURL) {
-                    return response.status(BAD_REQUEST).send({ message: "INVALID SOCIAL MEDIA URL" });
+                    return response.status(BAD_REQUEST).send({ message: "The given social media URL is inavlid" });
                 }
             }
             const user = await userService.updateUserById(id, userData);

@@ -50,6 +50,20 @@ class UserController {
         }
     };
 
+    checkSocialMediaURLs = async (request : IUser, response: Response) => {
+        try {
+            const userData: IUser = request;
+            if (userData.socialMediaURLs && userData.socialMediaURLs.length > ZERO) {
+                let validURL = validateSocialMediaURLs(userData.socialMediaURLs);
+                if (!validURL) {
+                    return response.status(BAD_REQUEST).send({ message: "The given social media URL is inavlid" });
+                }
+            }
+        } catch (error: any) {
+            return response.status(INTERNAL_SERVER_ERROR).send({ error: error.message });
+        }
+    }
+
     addUser = async (request: Request, response: Response) => {
         try {
             const userData: IUser = request.body;
@@ -60,12 +74,7 @@ class UserController {
                 return response.status(BAD_REQUEST).send({ message: "User with given wallet address exists." });
             }
 
-            if (userData.socialMediaURLs && userData.socialMediaURLs.length > ZERO) {
-                let validURL = validateSocialMediaURLs(userData.socialMediaURLs);
-                if (!validURL) {
-                    return response.status(BAD_REQUEST).send({ message: "The given social media URL is inavlid" });
-                }
-            }
+            await this.checkSocialMediaURLs(userData,response);
 
             const user = await userService.addMainUser(userData);
             return response.status(CREATED).send({
@@ -88,12 +97,9 @@ class UserController {
             if (userData.walletAddress){
                 return response.status(BAD_REQUEST).send({ message: "The wallet address cannot be updated" });
             }
-            if (userData.socialMediaURLs && userData.socialMediaURLs.length > ZERO) {
-                let validURL = validateSocialMediaURLs(userData.socialMediaURLs);
-                if (!validURL) {
-                    return response.status(BAD_REQUEST).send({ message: "The given social media URL is inavlid" });
-                }
-            }
+            
+            await this.checkSocialMediaURLs(userData,response);
+            
             const user = await userService.updateUserById(id, userData);
             if (!user) {
                 return response.status(NOT_FOUND).send({
@@ -110,6 +116,7 @@ class UserController {
         }
     }
 }
+
 
 function validateSocialMediaURLs(socialMediaURLs: ISocialMediaURLS[]): boolean {
     for (const obj of socialMediaURLs) {

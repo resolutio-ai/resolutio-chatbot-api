@@ -1,6 +1,7 @@
 import axios from "axios";
 import { retrieveFiles, storeFiles } from "../integrations/web3storage";
 import { CreatedWork, ICreatedWork } from "../models/createdWork.schema";
+import { User } from "../models/user.model"
 import { executeUserOp, getPartialUserOp } from "../integrations/biconomy";
 import { ethers } from "ethers";
 import { getNetworkConfig } from "../utils/network.utils";
@@ -9,11 +10,26 @@ import { BAD_REQUEST, ONE, ZERO } from "../utils/constants.utils";
 import { ICreateWorkSchema, ICreatorWorkMetadata } from "../models/interfaces.models";
 
 class FeedPageService {
-    getPaginatedWorks = async (page: number, count: number, search: string, medium: string, licenseType: string, startDate: string, endDate: string ) => {
+    getPaginatedWorks = async (page: number, count: number, nameOfWork: string, nameOfCreator: string, medium: string, licenseType: string, startDate: string, endDate: string) => {
         const skip = (page - 1) * count;
         const query: any = {};
-        if (search) {
-            query.nameOfWork = { $regex: search, $options: 'i' };
+        const userquery: any = {};
+
+        if (nameOfCreator) {
+            userquery.firstName = { $regex: nameOfCreator, $options: 'i' };
+            const users = await User.find(userquery);
+            const userIds = users.map(user => user._id);
+
+            if (userIds.length > ZERO) {
+                query.userId = { $in: userIds };
+            }
+            else {
+                query.userId = null;
+            }
+        }
+
+        if (nameOfWork) {
+            query.nameOfWork = { $regex: nameOfWork, $options: 'i' };
         }
         if (medium) {
             query.medium = medium;

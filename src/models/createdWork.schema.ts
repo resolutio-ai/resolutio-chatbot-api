@@ -11,7 +11,7 @@ export interface ICreatedWork extends CreatedWorkType {
     nameOfWork: string,
     medium: string,
     altMedium?: string
-    timeStamp: string,
+    timeStamp: Date,
     license: string,
     cid: string
 }
@@ -21,7 +21,7 @@ const createdWorkSchema = new Schema<ICreatedWork>({
     nameOfWork: { type: String, required: true },
     medium: { type: String, required: true },
     altMedium: { type: String },
-    timeStamp: { type: String, required: true },
+    timeStamp: { type: Date, required: true },
     licenseType: { type: String, required: true },
     cid: { type: String, required: true },
     fileUploadResponse: {

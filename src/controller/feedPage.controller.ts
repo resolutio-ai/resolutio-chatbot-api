@@ -9,19 +9,19 @@ import { ICreateWorkSchema } from "../models/interfaces.models";
 
 
 class FeedPageController {
-    
+
     paginatedWorks = async (request: Request, response: Response) => {
-        const { page = 1, count = 1 } = request.query;
+        const { page = 1, count = 1, search = '', medium = '', licenseType = '' } = request.query;
         const pageNumber = parseInt(page as string, 10);
-        const pageSize = parseInt(count as string, 10);
+        const pageCount = parseInt(count as string, 10);
 
         try {
-            const { works, totalWorks, totalPages, currentPage } = await feedPageServices.getPaginatedWorks(pageNumber, pageSize);
+            const { works, totalWorks, totalPages, currentPage } = await feedPageServices.getPaginatedWorks(pageNumber, pageCount, search as string, medium as string, licenseType as string);
             if (works.length === 0) {
                 return response.status(NOT_FOUND).send({ message: "No work found" });
             }
             return response.status(OK).send({
-                message: "Work retrieved successfully",
+                message: "Works retrieved successfully",
                 data: works,
                 totalWorks,
                 totalPages,

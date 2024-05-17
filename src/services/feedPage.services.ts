@@ -9,10 +9,23 @@ import { BAD_REQUEST, ONE, ZERO } from "../utils/constants.utils";
 import { ICreateWorkSchema, ICreatorWorkMetadata } from "../models/interfaces.models";
 
 class FeedPageService {
-    getPaginatedWorks = async (page: number, count: number) => {
+    getPaginatedWorks = async (page: number, count: number, search: string, medium: string, licenseType: string ) => {
         const skip = (page - 1) * count;
-        const works = await CreatedWork.find().skip(skip).limit(count);
-        const totalWorks = await CreatedWork.countDocuments();
+        const query: any = {};
+        if (search) {
+            query.nameOfWork = { $regex: search, $options: 'i' };
+        }
+        if (medium) {
+            query.medium = medium;
+        }
+        if (licenseType) {
+            query.licenseType = licenseType;
+        }
+        if (medium) {
+            query.medium = medium;
+        }
+        const works = await CreatedWork.find(query).skip(skip).limit(count);
+        const totalWorks = await CreatedWork.countDocuments(query);
         return {
             works,
             totalWorks,

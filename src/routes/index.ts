@@ -3,6 +3,7 @@ import conversationRouter from "./conversation.route";
 import createdWorkRouter from "./createdWork.routes";
 import authRoute from "./auth.route";
 import userRoute from "./user.route";
+import feedPageRoute from "./feedPage.route";
 
 export const apiRoutes =  Router()
     .use(json())
@@ -11,3 +12,4 @@ export const apiRoutes =  Router()
     .use("/v1.0/conversation", conversationRouter)
     .use("/v1.0/evidence", createdWorkRouter)
     .use("/v1.0/user", userRoute)
+    .use("/v1.0/feed", feedPageRoute)

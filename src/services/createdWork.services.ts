@@ -1,6 +1,6 @@
 import axios from "axios";
 import { retrieveFiles, storeFiles } from "../integrations/web3storage";
-import { CreatedWork, ICreatedWork } from "../models/creatorarmor.schema";
+import { CreatedWork, ICreatedWork } from "../models/createdWork.schema";
 import { executeUserOp, getPartialUserOp } from "../integrations/biconomy";
 import { ethers } from "ethers";
 import { getNetworkConfig } from "../utils/network.utils";
@@ -12,6 +12,9 @@ class CreatedWorkService {
 
     getWorkByCID = async (cid: string) =>
         await CreatedWork.findOne({ cid });
+
+    getWorksByUser = async (userId: string) =>
+        await CreatedWork.find({userId});
 
     createTimestamp = async (createWorkRequest: ICreateWorkSchema) => {
         //Todo: Retrieve creator from the backend
@@ -27,7 +30,7 @@ class CreatedWorkService {
             altMedium: createWorkRequest.metadata.alternativeMedium,
             medium: createWorkRequest.metadata.medium,
             timeStamp: createWorkRequest.metadata.dateOfCreation ?? Date.now,
-            creatorId: createWorkRequest.metadata.creatorId,
+            userId: createWorkRequest.metadata.userId,
             fileUploadResponse: createWorkRequest.fileUploadResponse.data.fileUploadResponse,
             licenseUploadResponse: createWorkRequest.fileUploadResponse.data.licenseUploadResponse
         });

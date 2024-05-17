@@ -9,7 +9,7 @@ import { BAD_REQUEST, ONE, ZERO } from "../utils/constants.utils";
 import { ICreateWorkSchema, ICreatorWorkMetadata } from "../models/interfaces.models";
 
 class FeedPageService {
-    getPaginatedWorks = async (page: number, count: number, search: string, medium: string, licenseType: string ) => {
+    getPaginatedWorks = async (page: number, count: number, search: string, medium: string, licenseType: string, startDate: string, endDate: string ) => {
         const skip = (page - 1) * count;
         const query: any = {};
         if (search) {
@@ -23,6 +23,15 @@ class FeedPageService {
         }
         if (medium) {
             query.medium = medium;
+        }
+        if (startDate || endDate) {
+            query.timeStamp = {};
+            if (startDate) {
+                query.timeStamp.$gte = new Date(startDate);
+            }
+            if (endDate) {
+                query.timeStamp.$lte = new Date(endDate);
+            }
         }
         const works = await CreatedWork.find(query).skip(skip).limit(count);
         const totalWorks = await CreatedWork.countDocuments(query);

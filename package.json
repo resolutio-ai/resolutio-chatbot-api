@@ -6,9 +6,6 @@
   "repository": "https://github.com/resolutio-ai/resolutio-chatbot-api.git",
   "author": "king-Alex-d-great <ogubuikealex@gmail.com>",
   "license": "MIT",
-  "engines": {
-    "node": "20.5.1"
-  },
   "scripts": {
     "dev": "tsc && yarn nodemon",
     "build": "rimraf ./build && tsc",

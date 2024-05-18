@@ -57,8 +57,6 @@ class CreatedWorkController {
     createTimeStamp = async (request: Request, response: Response) => {
         try {
 
-            console.log({body: request.body})
-
             //validate request.body 
             const hash = await createdWorkServices.createTimestamp(request.body as ICreateWorkSchema);
 

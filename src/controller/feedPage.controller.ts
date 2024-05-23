@@ -1,22 +1,27 @@
 import { Request, Response } from "express";
 import { BAD_REQUEST, NOT_FOUND, INTERNAL_SERVER_ERROR, OK, ONE } from "../utils/constants.utils";
 import { storeFiles } from "../integrations/web3storage";
-import { ICreatedWork } from "../models/createdWork.schema";
 import { uploadArtWorkSchema } from "../utils/validation.utils";
-import createdWorkServices from "../services/createdWork.services";
 import feedPageServices from "../services/feedPage.services";
-import { ICreateWorkSchema } from "../models/interfaces.models";
-
+import { GetPaginatedWorksRequest } from "../services/feedPage.services";
 
 class FeedPageController {
 
-    paginatedWorks = async (request: Request, response: Response) => {
-        const { page = 1, count = 1, nameOfCreator = '', nameOfWork = '', medium = '', licenseType = '', startDate = '', endDate = ''} = request.query;
-        const pageNumber = parseInt(page as string, 10);
-        const pageCount = parseInt(count as string, 10);
+    paginatedWorks = async (request : Request <any, any, any, GetPaginatedWorksRequest>, response: Response) => {
+        
+        const { page = 1, count = 1, searchParam = '', medium = '', licenseType = '', startDate = '', endDate = ''} = request.query;
+        const req : GetPaginatedWorksRequest= {
+            page, 
+            count,
+            searchParam,
+            medium,
+            licenseType,
+            startDate,
+            endDate
+        };
 
         try {
-            const { works, totalWorks, totalPages, currentPage } = await feedPageServices.getPaginatedWorks(pageNumber, pageCount, nameOfWork as string, nameOfCreator as string, medium as string, licenseType as string, startDate as string, endDate as string);
+            const { works, totalWorks, totalPages, currentPage } = await feedPageServices.getPaginatedWorks(req);
             if (works.length === 0) {
                 return response.status(NOT_FOUND).send({ message: "No work found" });
             }

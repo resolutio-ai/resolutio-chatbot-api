@@ -60,8 +60,6 @@ class FeedPageService {
             const searchConditions = await this.getSearchQuery(request.searchParam);
             if (searchConditions.length > ZERO) {
                 query.$or = searchConditions;
-            } else {
-                query._id = null;
             }
         }
 

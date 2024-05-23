@@ -9,7 +9,7 @@ class FeedPageController {
 
     paginatedWorks = async (request : Request <any, any, any, GetPaginatedWorksRequest>, response: Response) => {
         
-        const { page = 1, count = 1, searchParam = '', medium = '', licenseType = '', startDate = '', endDate = ''} = request.query;
+        const { page = 1, count = 10, searchParam = '', medium = '', licenseType = '', startDate = '', endDate = ''} = request.query;
         const req : GetPaginatedWorksRequest= {
             page, 
             count,

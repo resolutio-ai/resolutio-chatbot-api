@@ -47,7 +47,6 @@ class FeedPageService {
         if (workIds.length > ZERO) {
             searchConditions.push({ _id: { $in: workIds } });
         }
-        console.log(searchConditions)
         return searchConditions;
     }
 

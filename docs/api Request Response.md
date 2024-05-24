@@ -46,30 +46,39 @@ Response
 
 ### Query parameters 
 
-page: number
-count: number 
-searchParam: string 
-medium: string 
-licenseType: string 
-startDate: string 
-endDate: string
+* page: number
+* count: number 
+* searchParam: string 
+* medium: string 
+* licenseType: string 
+* startDate: string 
+* endDate: string
 
-Sample
+#### Sample
 
-page  2 // shows the contents on second page (default set to 1)
-Count 10 // max only 10 items is shown in single page
+* page  2 // shows the contents on second page (default set to 1)
 
-searchParam - Stella //(searches if there is any work with its name as Stella or nameOfCreator as Stella) matches with the work which has nameOfCreator as Stella
+* Count 10 // max only 10 items is shown in single page
+
+##### searchParam 
+eg: Stella 
+(searches if there is any work with its name as Stella or nameOfCreator as Stella) 
+
+matches with the work which has nameOfCreator as Stella 
+
 url : [http://localhost:6283/api/v1.0/feed/?searchParam=Stella](http://localhost:6283/api/v1.0/feed/?searchParam=Stella)
 
-Filters
-Medium - Art 
+##### Filters
+
+1. Medium - Art 
+
 Options available { "Film" , "Photo" , "Music" , "AI" , "Art" , "Other" }
 
-licenseType - CC BY
+2. licenseType - CC BY
+
 Options available {"CC BY" , "CC BY-SA" , "CC-BY-NC" , "CC-BY-NC-SA" , "CC-BY-ND" , "CC-BY-NC-ND" , "CC0" , "resolutio License" , "Your own License" }
 
-startDate, endDate  ( string values converted to date using new date(datestring) function )
+3. startDate, endDate  ( string values converted to date using new date(datestring) function )
 
 
 ## CREATE WORK

@@ -1,8 +1,8 @@
-##FEED PAGE 
+## FEED PAGE 
 
 Get paginated feed 
 
-(feed api route)[http://localhost:6283/api/v1.0/feed ]
+feedPage api route : [http://localhost:6283/api/v1.0/feed](http://localhost:6283/api/v1.0/feed)
 
 count (Default set to 10) - specify the number of items to be listed in one page
 
@@ -44,9 +44,8 @@ Response
 
 ```
 
+### Query parameters 
 
-
-###Query parameters 
 page: number
 count: number 
 searchParam: string 
@@ -61,7 +60,7 @@ page  2 // shows the contents on second page (default set to 1)
 Count 10 // max only 10 items is shown in single page
 
 searchParam - Stella //(searches if there is any work with its name as Stella or nameOfCreator as Stella) matches with the work which has nameOfCreator as Stella
-
+url : [http://localhost:6283/api/v1.0/feed/?searchParam=Stella](http://localhost:6283/api/v1.0/feed/?searchParam=Stella)
 
 Filters
 Medium - Art 
@@ -73,12 +72,12 @@ Options available {"CC BY" , "CC BY-SA" , "CC-BY-NC" , "CC-BY-NC-SA" , "CC-BY-ND
 startDate, endDate  ( string values converted to date using new date(datestring) function )
 
 
-##CREATE WORK
+## CREATE WORK
 
-(create work api route)[http://localhost:6283/api/v1.0/evidence/] 
+create work api route : [http://localhost:6283/api/v1.0/evidence/](http://localhost:6283/api/v1.0/evidence/)
 
 Request body
-
+```
 {
     "metadata": {
         "userId": "6615a2d23975538997f6fce7",
@@ -107,14 +106,15 @@ Request body
     "finalCID": "4598l0l890lcppl"
 }
 
+```
 
-
-###Get work by a user 
+### Get work by a user 
 
 Give userId as a query parameter
 
-(getAllWorksByUser api route) [http://localhost:6283/api/v1.0/evidence/?userId=6615a2d23975538997f6fce7] 
+url : [http://localhost:6283/api/v1.0/evidence/?userId=6615a2d23975538997f6fce7](http://localhost:6283/api/v1.0/evidence/?userId=6615a2d23975538997f6fce7)
 
+```
 {
   "message": "works by user retrieved successfully",
   "data": [
@@ -144,23 +144,25 @@ Give userId as a query parameter
     }
   ]
 }
+```
 
-###Get work by cid
+### Get work by cid
 
-(getCreatedWork by cid)[http://localhost:6283/api/v1.0/evidence/cid?cid=4598l0l890acppl ]
+getCreatedWork by cid : [http://localhost:6283/api/v1.0/evidence/cid?cid=4598l0l890acppl](http://localhost:6283/api/v1.0/evidence/cid?cid=4598l0l890acppl)
 
 Response - format same as above
 
 
-##USER PROFILE
+## USER PROFILE
 
-###Get all users
+### Get all users
 
-(getAllUsers api route)[http://localhost:6283/api/v1.0/user/]
+getAllUsers api route : [http://localhost:6283/api/v1.0/user/](http://localhost:6283/api/v1.0/user/)
 
 Response 
 
-    {
+```
+{
   "data": [
     {
       "_id": "6615a2d23975538997f6fce7",
@@ -226,18 +228,19 @@ Response
   ],
   "message": "Users retrieved successfully"
 }
+```
 
+### Get user by wallet address
 
-###Get user by wallet address
+url : [http://localhost:6283/api/v1.0/user/0x1234567890abceekk](http://localhost:6283/api/v1.0/user/0x1234567890abceekk)
 
-(http://localhost:6283/api/v1.0/user/0x1234567890abceekk)[http://localhost:6283/api/v1.0/user/0x1234567890abceekk]
+### Create user
 
-###Create user
-
-(http://localhost:6283/api/v1.0/user/)[http://localhost:6283/api/v1.0/user/]
+url : [http://localhost:6283/api/v1.0/user/](http://localhost:6283/api/v1.0/user/)
 
 Request body
 
+```
 {
     "walletAddress": "0x1234567890abcllkk",
     "firstName": "George",
@@ -252,11 +255,12 @@ Request body
       }
     ]
   }
+```
 
 nameOfSocialMedia available { "Twitter", "Behance", "Instagram" }
 
 Response 
-
+```
 {
   "data": {
     "walletAddress": "0x1234567890abcllkk",
@@ -277,10 +281,11 @@ Response
   "message": "User created successfully"
 }
 
+```
 
-###Update user - give userId
+### Update user - give userId
 
-(http://localhost:6283/api/v1.0/user/661ce5fb18b805865b912cc6)[http://localhost:6283/api/v1.0/user/661ce5fb18b805865b912cc6] 
+url : [http://localhost:6283/api/v1.0/user/661ce5fb18b805865b912cc6](http://localhost:6283/api/v1.0/user/661ce5fb18b805865b912cc6)
 
 Request - only give the fields that need to be updated (wallet address cannot be updated) 
 

@@ -6,7 +6,7 @@ import { executeUserOp, getPartialUserOp } from "../integrations/biconomy";
 import { ethers } from "ethers";
 import { getNetworkConfig } from "../utils/network.utils";
 import { HttpException } from "../utils/exceptions.utils";
-import { ZERO } from "../utils/constants.utils";
+import { ONE, ZERO } from "../utils/constants.utils";
 
 export type GetPaginatedWorksRequest = {
     page : number,
@@ -47,7 +47,7 @@ class FeedPageService {
         if (workIds.length > ZERO) {
             searchConditions.push({ _id: { $in: workIds } });
         }
-    
+        console.log(searchConditions)
         return searchConditions;
     }
 
@@ -58,9 +58,15 @@ class FeedPageService {
 
         if(request.searchParam){
             const searchConditions = await this.getSearchQuery(request.searchParam);
-            if (searchConditions.length > ZERO) {
-                query.$or = searchConditions;
+            if (!searchConditions || searchConditions.length < ONE) {
+                return {
+                    works: [],
+                    totalWorks: 0,
+                    totalPages: 0,
+                    currentPage: 0
+                };
             }
+            query.$or = searchConditions;
         }
 
         if (request.medium) {

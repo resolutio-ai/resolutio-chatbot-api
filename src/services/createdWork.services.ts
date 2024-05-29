@@ -29,7 +29,7 @@ class CreatedWorkService {
             licenseType: createWorkRequest.metadata.licenseType,
             altMedium: createWorkRequest.metadata.alternativeMedium,
             medium: createWorkRequest.metadata.medium,
-            timeStamp: createWorkRequest.metadata.dateOfCreation ?? Date.now,
+            timeStamp: createWorkRequest.metadata.dateOfCreation ?? Date.now(),
             userId: createWorkRequest.metadata.userId,
             fileUploadResponse: createWorkRequest.fileUploadResponse.data.fileUploadResponse,
             licenseUploadResponse: createWorkRequest.fileUploadResponse.data.licenseUploadResponse

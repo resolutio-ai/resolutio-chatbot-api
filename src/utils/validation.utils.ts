@@ -5,7 +5,7 @@ import { ICreatorWorkMetadata } from '../models/interfaces.models';
 export const sendChatRequestSchema = object().shape({
     userId: string(),
     messageContent: string().required("Users message is required"),
-    timeStamp: string().required("timeStamp is required"),
+    timeStamp: date().required("timeStamp is required"),
     isLoggedIn: bool().required("User's log in status is required")
 });
 
